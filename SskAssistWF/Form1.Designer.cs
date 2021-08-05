@@ -40,12 +40,10 @@ namespace SskAssistWF
             this.labelPro = new System.Windows.Forms.Label();
             this.labelSst = new System.Windows.Forms.Label();
             this.labelDest = new System.Windows.Forms.Label();
-            this.btnConnectStend = new System.Windows.Forms.Button();
             this.textBoxSqlStend = new System.Windows.Forms.TextBox();
             this.btnRunSqlStend = new System.Windows.Forms.Button();
             this.btnRunSqlProd = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.btnConnectProd = new System.Windows.Forms.Button();
+            this.textBoxSqlProd = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnCheck
@@ -149,74 +147,52 @@ namespace SskAssistWF
             this.labelDest.TabIndex = 10;
             this.labelDest.Text = "Dest";
             // 
-            // btnConnectStend
-            // 
-            this.btnConnectStend.Location = new System.Drawing.Point(2, 179);
-            this.btnConnectStend.Name = "btnConnectStend";
-            this.btnConnectStend.Size = new System.Drawing.Size(125, 23);
-            this.btnConnectStend.TabIndex = 11;
-            this.btnConnectStend.Text = "Connect to BD Stend";
-            this.btnConnectStend.UseVisualStyleBackColor = false;
-            this.btnConnectStend.Click += new System.EventHandler(this.btnConnectStend_Click);
-            // 
             // textBoxSqlStend
             // 
-            this.textBoxSqlStend.Location = new System.Drawing.Point(133, 181);
+            this.textBoxSqlStend.Location = new System.Drawing.Point(11, 291);
             this.textBoxSqlStend.Name = "textBoxSqlStend";
-            this.textBoxSqlStend.Size = new System.Drawing.Size(433, 20);
+            this.textBoxSqlStend.Size = new System.Drawing.Size(492, 20);
             this.textBoxSqlStend.TabIndex = 12;
             this.textBoxSqlStend.Text = "select * from ism_text_file";
-            this.textBoxSqlStend.TextChanged += new System.EventHandler(this.textBoxSqlStend_TextChanged);
+            //this.textBoxSqlStend.TextChanged += new System.EventHandler(this.textBoxSqlStend_TextChanged);
             // 
             // btnRunSqlStend
             // 
-            this.btnRunSqlStend.Location = new System.Drawing.Point(572, 179);
+            this.btnRunSqlStend.Location = new System.Drawing.Point(523, 289);
             this.btnRunSqlStend.Name = "btnRunSqlStend";
-            this.btnRunSqlStend.Size = new System.Drawing.Size(57, 23);
+            this.btnRunSqlStend.Size = new System.Drawing.Size(103, 23);
             this.btnRunSqlStend.TabIndex = 13;
-            this.btnRunSqlStend.Text = "Run sql";
+            this.btnRunSqlStend.Text = "Run sql (Stend)";
             this.btnRunSqlStend.UseVisualStyleBackColor = true;
             this.btnRunSqlStend.Click += new System.EventHandler(this.btnRunSqlStend_Click);
             // 
             // btnRunSqlProd
             // 
-            this.btnRunSqlProd.Location = new System.Drawing.Point(572, 217);
+            this.btnRunSqlProd.Location = new System.Drawing.Point(523, 327);
             this.btnRunSqlProd.Name = "btnRunSqlProd";
-            this.btnRunSqlProd.Size = new System.Drawing.Size(57, 23);
+            this.btnRunSqlProd.Size = new System.Drawing.Size(103, 23);
             this.btnRunSqlProd.TabIndex = 16;
-            this.btnRunSqlProd.Text = "Run sql";
+            this.btnRunSqlProd.Text = "Run sql (Prod)";
             this.btnRunSqlProd.UseVisualStyleBackColor = true;
             this.btnRunSqlProd.Click += new System.EventHandler(this.btnRunSqlProd_Click);
             // 
-            // textBox1
+            // textBoxSqlProd
             // 
-            this.textBox1.Location = new System.Drawing.Point(133, 219);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(433, 20);
-            this.textBox1.TabIndex = 15;
-            this.textBox1.Text = "sql";
-            // 
-            // btnConnectProd
-            // 
-            this.btnConnectProd.Location = new System.Drawing.Point(2, 216);
-            this.btnConnectProd.Name = "btnConnectProd";
-            this.btnConnectProd.Size = new System.Drawing.Size(125, 23);
-            this.btnConnectProd.TabIndex = 14;
-            this.btnConnectProd.Text = "Connect to BD Prod";
-            this.btnConnectProd.UseVisualStyleBackColor = false;
-            this.btnConnectProd.Click += new System.EventHandler(this.btnConnectProd_Click);
+            this.textBoxSqlProd.Location = new System.Drawing.Point(11, 329);
+            this.textBoxSqlProd.Name = "textBoxSqlProd";
+            this.textBoxSqlProd.Size = new System.Drawing.Size(492, 20);
+            this.textBoxSqlProd.TabIndex = 15;
+            this.textBoxSqlProd.Text = "select * from monitor_stend.ism_text_file";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 309);
+            this.ClientSize = new System.Drawing.Size(654, 497);
             this.Controls.Add(this.btnRunSqlProd);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.btnConnectProd);
+            this.Controls.Add(this.textBoxSqlProd);
             this.Controls.Add(this.btnRunSqlStend);
             this.Controls.Add(this.textBoxSqlStend);
-            this.Controls.Add(this.btnConnectStend);
             this.Controls.Add(this.labelDest);
             this.Controls.Add(this.labelSst);
             this.Controls.Add(this.labelPro);
@@ -249,12 +225,10 @@ namespace SskAssistWF
         private System.Windows.Forms.Label labelPro;
         private System.Windows.Forms.Label labelSst;
         private System.Windows.Forms.Label labelDest;
-        private System.Windows.Forms.Button btnConnectStend;
         private System.Windows.Forms.TextBox textBoxSqlStend;
         private System.Windows.Forms.Button btnRunSqlStend;
         private System.Windows.Forms.Button btnRunSqlProd;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button btnConnectProd;
+        private System.Windows.Forms.TextBox textBoxSqlProd;
     }
 }
 

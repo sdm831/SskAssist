@@ -3,7 +3,7 @@ using System.IO;
 
 namespace SskAssistWF
 {
-    public static class PrintServerObjects
+    public static class Print
     {
         public static void PrintServers(this SortedSet<string> hs, string keyWord, string path)
         {            
@@ -75,6 +75,11 @@ namespace SskAssistWF
                 File.AppendAllText(path, $"        {item}\n");
             }
             File.AppendAllText(path, $"\n");
-        }  
+        }
+
+        public static void PrintConfig(string[] config, SortedSet<string> list)
+        {
+
+        }
     }
 }

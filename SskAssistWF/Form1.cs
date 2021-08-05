@@ -16,13 +16,20 @@ namespace SskAssistWF
 {
     public partial class Form1 : Form
     {
+        //MyDataObject myDataObject = new MyDataObject("");
+
         public Form1()
         {
             InitializeComponent();
-        }   
+        }
 
-        private void btnChoosePro_Click(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
+            
+        }
+        
+        private void btnChoosePro_Click(object sender, EventArgs e)
+        {   
             OpenFileDialog ofdPro = new OpenFileDialog();
             ofdPro.ShowDialog();
             textBoxPathPro.Text = ofdPro.FileName;
@@ -86,20 +93,7 @@ namespace SskAssistWF
             proServerObjects.PrintAllObj(listDiffPath, "Deleted");
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnConnectStend_Click(object sender, EventArgs e)
-        {
-            
-            //OraDbConnection.GetConnection(credentialsStend);
-            //oraConnectStend 
-
-
-            btnConnectStend.BackColor = System.Drawing.Color.Lime;
-        }
+                        
 
         private void btnRunSqlStend_Click(object sender, EventArgs e)
         {
@@ -118,26 +112,31 @@ namespace SskAssistWF
             {
                 MessageBox.Show(ex.Message);
             }
-            db.CloseConnection();
-        }
-
-        private void btnConnectProd_Click(object sender, EventArgs e)
-        {
-            
-            //OraDb db = new OraDb(OraDb.credentialProd);
-            //db.GetConnection().ConnectionString = OraDb.credentialProd;
-            //db.OpenConnection();
-            
-        }
+            db.CloseConnection();            
+        }                
 
         private void btnRunSqlProd_Click(object sender, EventArgs e)
         {
+            string sql = textBoxSqlProd.Text;
+            var responce = new List<string>();
 
+            OraDb db = new OraDb();
+            db.GetConnection().ConnectionString = OraDb.credentialStend;
+            db.OpenConnection();
+            try
+            {
+                responce = OraDb.GetDataFromDb(db.GetConnection(), sql);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            db.CloseConnection();
         }
 
-        private void textBoxSqlStend_TextChanged(object sender, EventArgs e)
-        {
+        //private void textBoxSqlStend_TextChanged(object sender, EventArgs e)
+        //{
 
-        }
+        //}
     }
 }
