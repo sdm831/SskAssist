@@ -44,11 +44,14 @@ namespace SskAssistWF
             this.btnRunSqlStend = new System.Windows.Forms.Button();
             this.btnRunSqlProd = new System.Windows.Forms.Button();
             this.textBoxSqlProd = new System.Windows.Forms.TextBox();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // btnCheck
             // 
-            this.btnCheck.Location = new System.Drawing.Point(550, 125);
+            this.btnCheck.Location = new System.Drawing.Point(562, 312);
             this.btnCheck.Name = "btnCheck";
             this.btnCheck.Size = new System.Drawing.Size(64, 20);
             this.btnCheck.TabIndex = 0;
@@ -58,32 +61,32 @@ namespace SskAssistWF
             // 
             // textBoxPathSst
             // 
-            this.textBoxPathSst.Location = new System.Drawing.Point(41, 75);
+            this.textBoxPathSst.Location = new System.Drawing.Point(41, 206);
             this.textBoxPathSst.Name = "textBoxPathSst";
-            this.textBoxPathSst.Size = new System.Drawing.Size(547, 20);
+            this.textBoxPathSst.Size = new System.Drawing.Size(485, 20);
             this.textBoxPathSst.TabIndex = 1;
             this.textBoxPathSst.Text = "choose SST config";
             // 
             // textBoxPathPro
             // 
-            this.textBoxPathPro.Location = new System.Drawing.Point(41, 49);
+            this.textBoxPathPro.Location = new System.Drawing.Point(41, 180);
             this.textBoxPathPro.Name = "textBoxPathPro";
-            this.textBoxPathPro.Size = new System.Drawing.Size(547, 20);
+            this.textBoxPathPro.Size = new System.Drawing.Size(485, 20);
             this.textBoxPathPro.TabIndex = 2;
             this.textBoxPathPro.Tag = "tag";
             this.textBoxPathPro.Text = "choose Prod config";
             // 
             // textBoxPathDest
             // 
-            this.textBoxPathDest.Location = new System.Drawing.Point(41, 100);
+            this.textBoxPathDest.Location = new System.Drawing.Point(119, 36);
             this.textBoxPathDest.Name = "textBoxPathDest";
-            this.textBoxPathDest.Size = new System.Drawing.Size(547, 20);
+            this.textBoxPathDest.Size = new System.Drawing.Size(485, 20);
             this.textBoxPathDest.TabIndex = 3;
             this.textBoxPathDest.Text = "choose destination directory";
             // 
             // btnChooseSst
             // 
-            this.btnChooseSst.Location = new System.Drawing.Point(592, 75);
+            this.btnChooseSst.Location = new System.Drawing.Point(533, 206);
             this.btnChooseSst.Name = "btnChooseSst";
             this.btnChooseSst.Size = new System.Drawing.Size(23, 20);
             this.btnChooseSst.TabIndex = 4;
@@ -93,7 +96,7 @@ namespace SskAssistWF
             // 
             // btnChoosePro
             // 
-            this.btnChoosePro.Location = new System.Drawing.Point(592, 49);
+            this.btnChoosePro.Location = new System.Drawing.Point(533, 180);
             this.btnChoosePro.Name = "btnChoosePro";
             this.btnChoosePro.Size = new System.Drawing.Size(23, 20);
             this.btnChoosePro.TabIndex = 5;
@@ -104,7 +107,7 @@ namespace SskAssistWF
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(42, 24);
+            this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(241, 13);
             this.label1.TabIndex = 6;
@@ -112,7 +115,7 @@ namespace SskAssistWF
             // 
             // btnChooseDest
             // 
-            this.btnChooseDest.Location = new System.Drawing.Point(591, 100);
+            this.btnChooseDest.Location = new System.Drawing.Point(610, 36);
             this.btnChooseDest.Name = "btnChooseDest";
             this.btnChooseDest.Size = new System.Drawing.Size(23, 20);
             this.btnChooseDest.TabIndex = 7;
@@ -123,7 +126,7 @@ namespace SskAssistWF
             // labelPro
             // 
             this.labelPro.AutoSize = true;
-            this.labelPro.Location = new System.Drawing.Point(9, 52);
+            this.labelPro.Location = new System.Drawing.Point(9, 183);
             this.labelPro.Name = "labelPro";
             this.labelPro.Size = new System.Drawing.Size(32, 13);
             this.labelPro.TabIndex = 8;
@@ -132,7 +135,7 @@ namespace SskAssistWF
             // labelSst
             // 
             this.labelSst.AutoSize = true;
-            this.labelSst.Location = new System.Drawing.Point(11, 77);
+            this.labelSst.Location = new System.Drawing.Point(11, 208);
             this.labelSst.Name = "labelSst";
             this.labelSst.Size = new System.Drawing.Size(28, 13);
             this.labelSst.TabIndex = 9;
@@ -141,24 +144,23 @@ namespace SskAssistWF
             // labelDest
             // 
             this.labelDest.AutoSize = true;
-            this.labelDest.Location = new System.Drawing.Point(8, 102);
+            this.labelDest.Location = new System.Drawing.Point(8, 38);
             this.labelDest.Name = "labelDest";
-            this.labelDest.Size = new System.Drawing.Size(29, 13);
+            this.labelDest.Size = new System.Drawing.Size(103, 13);
             this.labelDest.TabIndex = 10;
-            this.labelDest.Text = "Dest";
+            this.labelDest.Text = "Destination directory";
             // 
             // textBoxSqlStend
             // 
-            this.textBoxSqlStend.Location = new System.Drawing.Point(11, 291);
+            this.textBoxSqlStend.Location = new System.Drawing.Point(11, 427);
             this.textBoxSqlStend.Name = "textBoxSqlStend";
             this.textBoxSqlStend.Size = new System.Drawing.Size(492, 20);
             this.textBoxSqlStend.TabIndex = 12;
             this.textBoxSqlStend.Text = "select * from ism_text_file";
-            //this.textBoxSqlStend.TextChanged += new System.EventHandler(this.textBoxSqlStend_TextChanged);
             // 
             // btnRunSqlStend
             // 
-            this.btnRunSqlStend.Location = new System.Drawing.Point(523, 289);
+            this.btnRunSqlStend.Location = new System.Drawing.Point(523, 425);
             this.btnRunSqlStend.Name = "btnRunSqlStend";
             this.btnRunSqlStend.Size = new System.Drawing.Size(103, 23);
             this.btnRunSqlStend.TabIndex = 13;
@@ -168,7 +170,7 @@ namespace SskAssistWF
             // 
             // btnRunSqlProd
             // 
-            this.btnRunSqlProd.Location = new System.Drawing.Point(523, 327);
+            this.btnRunSqlProd.Location = new System.Drawing.Point(523, 454);
             this.btnRunSqlProd.Name = "btnRunSqlProd";
             this.btnRunSqlProd.Size = new System.Drawing.Size(103, 23);
             this.btnRunSqlProd.TabIndex = 16;
@@ -178,17 +180,60 @@ namespace SskAssistWF
             // 
             // textBoxSqlProd
             // 
-            this.textBoxSqlProd.Location = new System.Drawing.Point(11, 329);
+            this.textBoxSqlProd.Location = new System.Drawing.Point(11, 456);
             this.textBoxSqlProd.Name = "textBoxSqlProd";
             this.textBoxSqlProd.Size = new System.Drawing.Size(492, 20);
             this.textBoxSqlProd.TabIndex = 15;
             this.textBoxSqlProd.Text = "select * from monitor_stend.ism_text_file";
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(11, 87);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(63, 17);
+            this.radioButton1.TabIndex = 19;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "from DB";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(11, 157);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(83, 17);
+            this.radioButton2.TabIndex = 20;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "from Configs";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Sbp",
+            "Ckps",
+            "Cos",
+            "Sdm",
+            "Hdm"});
+            this.comboBox1.Location = new System.Drawing.Point(80, 86);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 21;
+            this.comboBox1.Tag = "";
+            this.comboBox1.Text = "Choose system";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(654, 497);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.radioButton2);
+            this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.btnRunSqlProd);
             this.Controls.Add(this.textBoxSqlProd);
             this.Controls.Add(this.btnRunSqlStend);
@@ -229,6 +274,9 @@ namespace SskAssistWF
         private System.Windows.Forms.Button btnRunSqlStend;
         private System.Windows.Forms.Button btnRunSqlProd;
         private System.Windows.Forms.TextBox textBoxSqlProd;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 

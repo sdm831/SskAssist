@@ -69,5 +69,15 @@ namespace SskAssistWF
                         
             return Regex.Replace(str, @"\d", "");
         }
+
+        public static void GetConfigDel(string[] config, List<string> list)
+        {
+
+        }
+
+        public static void GetConfigAdd(string[] config, List<string> list)
+        {
+
+        }
     }
 }

@@ -16,7 +16,12 @@ namespace SskAssistWF
 {
     public partial class Form1 : Form
     {
-        //MyDataObject myDataObject = new MyDataObject("");
+        DataObjects dataCkps = new DataObjects();
+        DataObjects dataSdm = new DataObjects();
+        DataObjects dataHdm = new DataObjects();
+        DataObjects dataSbp = new DataObjects();
+        DataObjects dataCos = new DataObjects();
+        DataObjects dataNoname = new DataObjects();
 
         public Form1()
         {
@@ -31,9 +36,12 @@ namespace SskAssistWF
         private void btnChoosePro_Click(object sender, EventArgs e)
         {   
             OpenFileDialog ofdPro = new OpenFileDialog();
-            ofdPro.ShowDialog();
+            ofdPro.ShowDialog();            
+            
             textBoxPathPro.Text = ofdPro.FileName;
             textBoxPathPro.Tag = ofdPro.SafeFileName;
+            DataObjects.PathConfProd[0] = ofdPro.FileName;
+            DataObjects.PathConfProd[1] = ofdPro.SafeFileName;
         }
 
         private void BtnChooseSst_Click(object sender, EventArgs e)
@@ -42,6 +50,8 @@ namespace SskAssistWF
             ofdSst.ShowDialog();
             textBoxPathSst.Text = ofdSst.FileName;      // полный путь до файла
             textBoxPathSst.Tag = ofdSst.SafeFileName;   // имя файла
+            DataObjects.PathConfStend[0] = ofdSst.FileName;
+            DataObjects.PathConfStend[1] = ofdSst.SafeFileName;
         }
 
         private void btnChooseDest_Click(object sender, EventArgs e)
@@ -91,9 +101,9 @@ namespace SskAssistWF
             // вывод уникальных объектов
             sstServerObjects.PrintAllObj(listDiffPath, "Added");
             proServerObjects.PrintAllObj(listDiffPath, "Deleted");
-        }
 
-                        
+
+        }                        
 
         private void btnRunSqlStend_Click(object sender, EventArgs e)
         {
@@ -133,6 +143,32 @@ namespace SskAssistWF
             }
             db.CloseConnection();
         }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            if(radioButton1.Checked == true)
+            {
+                radioButton2.Checked = false;
+            }
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton2.Checked == true)
+            {
+                radioButton1.Checked = false;
+            }
+        }
+
+        //private void button1_Click(object sender, EventArgs e)
+        //{
+
+        //}
+
+        //private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    radioButton1.Checked
+        //}
 
         //private void textBoxSqlStend_TextChanged(object sender, EventArgs e)
         //{

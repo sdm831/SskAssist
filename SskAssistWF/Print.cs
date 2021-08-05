@@ -77,9 +77,12 @@ namespace SskAssistWF
             File.AppendAllText(path, $"\n");
         }
 
-        public static void PrintConfig(string[] config, SortedSet<string> list)
+        public static void PrintConfig(string[] config, string path)
         {
-
+            foreach(var line in config)
+            {
+                File.AppendAllText(path, $"{line}\n");
+            }
         }
     }
 }
