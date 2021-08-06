@@ -11,17 +11,26 @@ using System.Windows.Forms;
 using Oracle.ManagedDataAccess.Client;
 
 
-
 namespace SskAssistWF
 {
     public partial class Form1 : Form
     {
-        DataObjects dataCkps = new DataObjects();
-        DataObjects dataSdm = new DataObjects();
-        DataObjects dataHdm = new DataObjects();
-        DataObjects dataSbp = new DataObjects();
-        DataObjects dataCos = new DataObjects();
-        DataObjects dataNoname = new DataObjects();
+        DataObjects dataSbp = new DataObjects("Sbp");
+        DataObjects dataCkps = new DataObjects("Ckps");
+        DataObjects dataCos = new DataObjects("Cos");
+        DataObjects dataSdm = new DataObjects("Sdm");
+        DataObjects dataHdm = new DataObjects("Hdm");        
+        DataObjects dataManual = new DataObjects("Manual");
+        
+        //List<DataObjects> subSystems = new List<DataObjects>()
+        //{
+        //    new DataObjects("Ckps"),
+        //    new DataObjects("Cos"),
+        //    new DataObjects("Sbp"),
+        //    new DataObjects("Sdm"),
+        //    new DataObjects("Hdm"),
+        //    new DataObjects("Manual")
+        //};        
 
         public Form1()
         {
@@ -60,6 +69,7 @@ namespace SskAssistWF
             if (fbdDest.ShowDialog() == DialogResult.OK)
             {
                 textBoxPathDest.Text = fbdDest.SelectedPath;
+                DataObjects.PathDestDir = fbdDest.SelectedPath;
             }            
         }
 
@@ -108,55 +118,77 @@ namespace SskAssistWF
         private void btnRunSqlStend_Click(object sender, EventArgs e)
         {
             //string sql = "Select product_id, ad_sourcetext from pm.print_media where id > 3000;";
-            string sql = textBoxSqlStend.Text;
-            var responce = new List<string>();
-
-            OraDb db = new OraDb();
-            db.GetConnection().ConnectionString = OraDb.credentialStend;
-            db.OpenConnection();
-            try
-            {
-                responce = OraDb.GetDataFromDb(db.GetConnection(), sql);
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            db.CloseConnection();            
+            //string sql = textBoxSqlStend.Text;
+            //var responce = new List<string>();
+            //
+            //OraDb db = new OraDb();
+            //db.GetConnection().ConnectionString = OraDb.credentialStend;
+            //db.OpenConnection();
+            //try
+            //{
+            //    responce = OraDb.GetConfigFromDb(db.GetConnection(), sql);
+            //}
+            //catch(Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message);
+            //}
+            //db.CloseConnection();            
         }                
 
         private void btnRunSqlProd_Click(object sender, EventArgs e)
         {
-            string sql = textBoxSqlProd.Text;
-            var responce = new List<string>();
-
-            OraDb db = new OraDb();
-            db.GetConnection().ConnectionString = OraDb.credentialStend;
-            db.OpenConnection();
-            try
-            {
-                responce = OraDb.GetDataFromDb(db.GetConnection(), sql);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            db.CloseConnection();
+            //string sql = textBoxSqlProd.Text;
+            //var responce = new List<string>();
+            //
+            //OraDb db = new OraDb();
+            //db.GetConnection().ConnectionString = OraDb.credentialStend;
+            //db.OpenConnection();
+            //try
+            //{
+            //    responce = OraDb.GetConfigFromDb(db.GetConnection(), sql);
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message);
+            //}
+            //db.CloseConnection();
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            if(radioButton1.Checked == true)
+            if(radioBtnFromDb.Checked == true)
             {
-                radioButton2.Checked = false;
+                radioBtnFromFiles.Checked = false;
             }
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton2.Checked == true)
+            if (radioBtnFromFiles.Checked == true)
             {
-                radioButton1.Checked = false;
+                radioBtnFromDb.Checked = false;
+            }
+        }
+
+        private void btnGetData_Click(object sender, EventArgs e)
+        {
+            if(radioBtnFromDb.Checked == false && radioBtnFromFiles.Checked == false)
+            {
+                MessageBox.Show("subSystem is not checked");
+            }
+            
+            if (radioBtnFromDb.Checked == true)
+            {
+                if (comboBoxChooseSystem.Text == "Sbp") { DataImport.GetDataFromDb(dataSbp); }
+                if (comboBoxChooseSystem.Text == "Ckps") { DataImport.GetDataFromDb(dataCkps); }
+                if (comboBoxChooseSystem.Text == "Cos") { DataImport.GetDataFromDb(dataCos); }
+                if (comboBoxChooseSystem.Text == "Sdm") { DataImport.GetDataFromDb(dataSdm); }
+                if (comboBoxChooseSystem.Text == "Hdm") { DataImport.GetDataFromDb(dataHdm); }
+            }
+
+            if(radioBtnFromFiles.Checked == true)
+            {
+                DataImport.GetDataFromDb(dataManual);
             }
         }
 

@@ -41,6 +41,11 @@ namespace SskAssistWF
             return listObjects;
         }
 
+        public static void SetConfigStend(string confFull, string name)
+        {
+            
+        }
+
         public static SortedSet<string> GetListObjects(string[] configFull, string typeObj, string keyWord, bool enpoint)
         {
             SortedSet<string> listObjects = new SortedSet<string>();

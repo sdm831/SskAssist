@@ -44,14 +44,15 @@ namespace SskAssistWF
             this.btnRunSqlStend = new System.Windows.Forms.Button();
             this.btnRunSqlProd = new System.Windows.Forms.Button();
             this.textBoxSqlProd = new System.Windows.Forms.TextBox();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.radioBtnFromDb = new System.Windows.Forms.RadioButton();
+            this.radioBtnFromFiles = new System.Windows.Forms.RadioButton();
+            this.comboBoxChooseSystem = new System.Windows.Forms.ComboBox();
+            this.btnGetData = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnCheck
             // 
-            this.btnCheck.Location = new System.Drawing.Point(562, 312);
+            this.btnCheck.Location = new System.Drawing.Point(569, 205);
             this.btnCheck.Name = "btnCheck";
             this.btnCheck.Size = new System.Drawing.Size(64, 20);
             this.btnCheck.TabIndex = 0;
@@ -186,54 +187,66 @@ namespace SskAssistWF
             this.textBoxSqlProd.TabIndex = 15;
             this.textBoxSqlProd.Text = "select * from monitor_stend.ism_text_file";
             // 
-            // radioButton1
+            // radioBtnFromDb
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(11, 87);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(63, 17);
-            this.radioButton1.TabIndex = 19;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "from DB";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            this.radioBtnFromDb.AutoSize = true;
+            this.radioBtnFromDb.Location = new System.Drawing.Point(11, 87);
+            this.radioBtnFromDb.Name = "radioBtnFromDb";
+            this.radioBtnFromDb.Size = new System.Drawing.Size(63, 17);
+            this.radioBtnFromDb.TabIndex = 19;
+            this.radioBtnFromDb.TabStop = true;
+            this.radioBtnFromDb.Text = "from DB";
+            this.radioBtnFromDb.UseVisualStyleBackColor = true;
+            this.radioBtnFromDb.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
-            // radioButton2
+            // radioBtnFromFiles
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(11, 157);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(83, 17);
-            this.radioButton2.TabIndex = 20;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "from Configs";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            this.radioBtnFromFiles.AutoSize = true;
+            this.radioBtnFromFiles.Location = new System.Drawing.Point(11, 157);
+            this.radioBtnFromFiles.Name = "radioBtnFromFiles";
+            this.radioBtnFromFiles.Size = new System.Drawing.Size(69, 17);
+            this.radioBtnFromFiles.TabIndex = 20;
+            this.radioBtnFromFiles.TabStop = true;
+            this.radioBtnFromFiles.Text = "from Files";
+            this.radioBtnFromFiles.UseVisualStyleBackColor = true;
+            this.radioBtnFromFiles.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
-            // comboBox1
+            // comboBoxChooseSystem
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.comboBoxChooseSystem.FormattingEnabled = true;
+            this.comboBoxChooseSystem.Items.AddRange(new object[] {
             "Sbp",
             "Ckps",
             "Cos",
             "Sdm",
             "Hdm"});
-            this.comboBox1.Location = new System.Drawing.Point(80, 86);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 21;
-            this.comboBox1.Tag = "";
-            this.comboBox1.Text = "Choose system";
+            this.comboBoxChooseSystem.Location = new System.Drawing.Point(80, 86);
+            this.comboBoxChooseSystem.Name = "comboBoxChooseSystem";
+            this.comboBoxChooseSystem.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxChooseSystem.TabIndex = 21;
+            this.comboBoxChooseSystem.Tag = "";
+            this.comboBoxChooseSystem.Text = "Choose system";
+            // 
+            // btnGetData
+            // 
+            this.btnGetData.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnGetData.Location = new System.Drawing.Point(291, 78);
+            this.btnGetData.Name = "btnGetData";
+            this.btnGetData.Size = new System.Drawing.Size(71, 35);
+            this.btnGetData.TabIndex = 22;
+            this.btnGetData.Text = "getData";
+            this.btnGetData.UseVisualStyleBackColor = true;
+            this.btnGetData.Click += new System.EventHandler(this.btnGetData_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(654, 497);
-            this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.radioButton2);
-            this.Controls.Add(this.radioButton1);
+            this.Controls.Add(this.btnGetData);
+            this.Controls.Add(this.comboBoxChooseSystem);
+            this.Controls.Add(this.radioBtnFromFiles);
+            this.Controls.Add(this.radioBtnFromDb);
             this.Controls.Add(this.btnRunSqlProd);
             this.Controls.Add(this.textBoxSqlProd);
             this.Controls.Add(this.btnRunSqlStend);
@@ -274,9 +287,10 @@ namespace SskAssistWF
         private System.Windows.Forms.Button btnRunSqlStend;
         private System.Windows.Forms.Button btnRunSqlProd;
         private System.Windows.Forms.TextBox textBoxSqlProd;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.RadioButton radioBtnFromDb;
+        private System.Windows.Forms.RadioButton radioBtnFromFiles;
+        private System.Windows.Forms.ComboBox comboBoxChooseSystem;
+        private System.Windows.Forms.Button btnGetData;
     }
 }
 
