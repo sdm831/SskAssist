@@ -10,15 +10,19 @@ namespace SskAssistWF
 {
     public class OraDb
     {
-        public static string credentialProd = "Data Source=(DESCRIPTION =" + "(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.0.173)(PORT = 1521))"
-                                                        + "(CONNECT_DATA =" + "(SERVER = DEDICATED)" + "(SERVICE_NAME = orcl)));"    // SERVICE_NAME = orclcdb
-                                                        + "User Id=system;Password=oracle;";
-        public static string credentialStend = "Data Source=(DESCRIPTION =" + "(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.0.173)(PORT = 1521))"
-                                                    + "(CONNECT_DATA =" + "(SERVER = DEDICATED)" + "(SERVICE_NAME = orcl)));"
+        public static string credentialProd = "Data Source=(DESCRIPTION =" + "(ADDRESS = (PROTOCOL = TCP)(HOST = sa5portal)(PORT = 1521))"
+                                                        + "(CONNECT_DATA =" + "(SERVER = DEDICATED)" + "(SERVICE_NAME = xe)));"    // SERVICE_NAME = orclcdb
+                                                        + "User Id=monitor_prod;Password=monitor_prod1;";
+        public static string credentialStend = "Data Source=(DESCRIPTION =" + "(ADDRESS = (PROTOCOL = TCP)(HOST = 10.93.128.98)(PORT = 1521))"
+                                                    + "(CONNECT_DATA =" + "(SERVER = DEDICATED)" + "(SERVICE_NAME = tsukoi)));"
                                                     + "User Id=monitor_stend;Password=monitor_stend;";
-        public static string sqlStendAll = "select content from monitor_stend.ism_text_file where id = 'itecoWasConfig'";
+            // lab DB
+        //public static string credentialStend = "Data Source=(DESCRIPTION =" + "(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.0.173)(PORT = 1521))"
+        //                                            + "(CONNECT_DATA =" + "(SERVER = DEDICATED)" + "(SERVICE_NAME = orcl)));"
+        //                                            + "User Id=monitor_stend;Password=monitor_stend;";
+        public static string sqlStendAll = "select content from monitor_stend.ism_text_file where id = 'ItecoWasMonitorConfig.xml'";
         
-        public static string sqlProdCkps = "select content from monitor_stend.ism_text_file where id = itecoWasConfig";
+        public static string sqlProdCkps = "select content from monitor_prod.ism_text_file where id = 'ItecoWasMonitorConfigCkpsNN.xml'";
         public static string sqlProdCos = "select content from monitor_stend.ism_text_file where id = itecoWasConfig";
         public static string sqlProdSbp = "select content from monitor_stend.ism_text_file where id = itecoWasConfig";
         public static string sqlProdSdm = "select content from monitor_stend.ism_text_file where id = itecoWasConfig";
@@ -88,41 +92,47 @@ namespace SskAssistWF
             return responce;
         }
 
+        public static List<string> GetDataFromDb(OracleConnection oraConnect, string sql)
+        {
+            List<string> responce = new List<string>();
 
+            OracleCommand cmd = new OracleCommand();
 
+            cmd.Connection = oraConnect;
+            cmd.CommandText = sql;
 
-        //public static List<string> GetConfigFromDb(OracleConnection oraConnect, string sql)
-        //{
-        //    List<string> responce = new List<string>();
+            using (DbDataReader reader = cmd.ExecuteReader())
+            {                
+                if (reader.HasRows)
+                {
+                    var str = "";
+                    for (var i = 0; i < reader.FieldCount; i++)
+                    {
+                        str += $"{reader.GetName(i)} ;";
+                    }
+                    while (reader.Read())
+                    {
+                        str += "\n";
+                        for (var i = 0; i < reader.FieldCount; i++)
+                        {
+                            str += $"{reader.GetString(i)} ;"; 
+                        }
+                        responce.Add(str);                        
+                    }
+                }
+            }
 
-        //    OracleCommand cmd = new OracleCommand();
-
-        //    cmd.Connection = oraConnect;
-        //    cmd.CommandText = sql;
-
-        //    using (DbDataReader reader = cmd.ExecuteReader())
-        //    {
-
-        //        if (reader.HasRows)
-        //        {
-
-        //            while (reader.Read())
-        //            {
-        //                responce.Add($"{reader.GetString(0)} {reader.GetString(1)}");
-        //            }
-        //        }
-        //    }
-        //    if (responce != null)
-        //    {
-        //        var str = "";
-        //        foreach(var item in responce)
-        //        {
-        //            str += $"{item}\n";
-        //        }
-        //        MessageBox.Show($"Row counts: {responce.Count().ToString()}\n{str}");
-        //        //MessageBox.Show(responce[0]);
-        //    }
-        //    return responce;
-        //}
+            if (responce != null)
+            {
+                var str = "";
+                foreach(var item in responce)
+                {
+                    str += $"{item}\n";
+                }
+                MessageBox.Show($"Row counts: {responce.Count().ToString()}\n{str}");
+                Print.PrintList(responce);                
+            }
+            return responce;
+        }
     }
 }

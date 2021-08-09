@@ -1,17 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using System.Windows.Forms;
 
 namespace SskAssistWF
 {
     public class MyDataObject
     {        
-        public string[] ConfigFullArr { get; set; }
+        public string[] ConfigFull { get; set; }
+        public string[] ConfigFullDel { get; set; }
+        public string[] ConfigFullDelAdd { get; set; }
+
         public SortedSet<string> Servers = new SortedSet<string>();        
 
         public MyDataObject(string strPath) 
         {
-            ConfigFullArr = File.ReadAllLines(strPath);
-            Servers = Parse.GetListObjects(ConfigFullArr, " serverName=", "status");            
+            try
+            {
+                ConfigFull = File.ReadAllLines(strPath, Print.ISO88595);                
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            Servers = Parse.GetListObjects(ConfigFull, " serverName=", "status");            
         }
     }
 }

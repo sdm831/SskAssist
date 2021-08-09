@@ -12,7 +12,7 @@ namespace SskAssistWF
 
             if (typeObj.Contains("queue"))
             {
-                keyWord = keyWord.ToLower().TrimPrefixAndDigits().Replace("server", "cluster");
+                keyWord = keyWord.ToLower().TrimPrefDig().Replace("server", "cluster");
             }            
 
             string objName;
@@ -31,7 +31,7 @@ namespace SskAssistWF
 
 
                                 // исключение дублированных систем (12,21,22) и ODR серверов
-                        if (!listObjects.Any(s => s.Contains(objName.TrimPrefixAndDigits())) && !objName.TrimPrefixAndDigits().ToLower().Contains("odr"))
+                        if (!listObjects.Any(s => s.Contains(objName.TrimPrefDig())) && !objName.TrimPrefDig().ToLower().Contains("odr"))
                         {
                             listObjects.Add(objName);
                         }
@@ -39,12 +39,7 @@ namespace SskAssistWF
                 }
             }
             return listObjects;
-        }
-
-        public static void SetConfigStend(string confFull, string name)
-        {
-            
-        }
+        }                
 
         public static SortedSet<string> GetListObjects(string[] configFull, string typeObj, string keyWord, bool enpoint)
         {
@@ -64,7 +59,7 @@ namespace SskAssistWF
             return listObjects;
         }
 
-        public static string TrimPrefixAndDigits(this string str)
+        public static string TrimPrefDig(this string str)
         {
             if (str.Contains('_'))
             {
@@ -75,9 +70,71 @@ namespace SskAssistWF
             return Regex.Replace(str, @"\d", "");
         }
 
-        public static void GetConfigDel(string[] config, List<string> list)
-        {
+        public static string[] GetConfigDel(string[] config, SortedDictionary<string, Server> dictStend)
+        {            
+            var list = new List<string>();
+            var lineAdd = true;
 
+            foreach(var line in config)
+            {
+                foreach(var server in dictStend)
+                {
+                    foreach(var v in server.Value.Apps)
+                    {   
+                        if (line.Contains(v) 
+                            && line.Contains(server.Key.TrimPrefDig())
+                            && line.Contains("appName="))
+                        {
+                            lineAdd = false;
+                            break;
+                        }                        
+                    }
+                    foreach (var v in server.Value.Queues)
+
+                    {
+                        if (line.Contains(v)
+                            && line.Contains(server.Key.Replace("Server", "Cluster").TrimPrefDig())
+                            && line.Contains("queueName="))
+                        {
+                            lineAdd = false;
+                            break;
+                        }
+                    }
+                    
+                    foreach (var v in server.Value.Endpoints)
+                    {
+                        if (line.Contains(v)
+                            && line.Contains(server.Key.TrimPrefDig()))
+                        {
+                            lineAdd = false;
+                            break;
+                        }
+                    }
+
+                    foreach (var v in server.Value.DataSources)
+                    {
+                        if (   line.Contains(v)
+                            && line.Contains(server.Key.TrimPrefDig())
+                            && line.Contains("dsName="))
+                        {
+                            lineAdd = false;
+                            break;
+                        }
+                    }
+                    if (lineAdd == false)
+                    {
+                        break;
+                    }
+                }
+
+                if(lineAdd == true)
+                {
+                    list.Add(line);                    
+                }
+                
+                lineAdd = true;                
+            }
+            return list.ToArray();
         }
 
         public static void GetConfigAdd(string[] config, List<string> list)

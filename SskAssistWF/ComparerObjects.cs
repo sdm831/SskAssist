@@ -11,7 +11,7 @@ namespace SskAssistWF
             {
                 foreach (var itemDictSst in dictSst)
                 {
-                    if (itemDictPro.Key.TrimPrefixAndDigits().ToLower() == itemDictSst.Key.TrimPrefixAndDigits().ToLower())
+                    if (itemDictPro.Key.TrimPrefDig().ToLower() == itemDictSst.Key.TrimPrefDig().ToLower())
                     {
                         RmObjects(itemDictPro.Value.Apps, itemDictSst.Value.Apps);
                         RmObjects(itemDictPro.Value.Queues, itemDictSst.Value.Queues);
@@ -30,15 +30,15 @@ namespace SskAssistWF
             {
                 foreach (var itemListSst in objsSst)
                 {
-                    if (itemListPro.TrimPrefixAndDigits() == itemListSst.TrimPrefixAndDigits())
+                    if (itemListPro.TrimPrefDig() == itemListSst.TrimPrefDig())
                     {
-                        duplicateObjects.Add(itemListPro.TrimPrefixAndDigits());
+                        duplicateObjects.Add(itemListPro.TrimPrefDig());
                     }
                 }
             }
             
-            objsPro.RemoveWhere(item => duplicateObjects.Contains(item.TrimPrefixAndDigits()));
-            objsSst.RemoveWhere(item => duplicateObjects.Contains(item.TrimPrefixAndDigits()));
+            objsPro.RemoveWhere(item => duplicateObjects.Contains(item.TrimPrefDig()));
+            objsSst.RemoveWhere(item => duplicateObjects.Contains(item.TrimPrefDig()));
         }   
     }
 }
