@@ -10,13 +10,33 @@ namespace SskAssistWF
 {
     public static class DataImport
     {
+        public static string[] GetConfigFromFile(string strPath)
+        {
+            try
+            {
+                return File.ReadAllLines(strPath, Print.ISO88595);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return null;
+        }
+
+        public static void GetObjFromConfigFile(string path)
+        {
+
+        }
+        
+        
         public static void GetDataFromDb(DataObjects subSystemObj)
         {
             DateTime currrentDate = DateTime.Now;
 
-            subSystemObj.PathProdlistAllObj  = $@"{DataObjects.PathDestDir}\{subSystemObj.Name}\{subSystemObj.Name}_Prod_All_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
-            subSystemObj.PathStendlistAllObj = $@"{DataObjects.PathDestDir}\{subSystemObj.Name}\{subSystemObj.Name}_Stend_All_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
-            subSystemObj.PathlistDiff = $@"{DataObjects.PathDestDir}\{subSystemObj.Name}\{subSystemObj.Name}_Diff_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
+            //subSystemObj.PathProdlistAllObj  = $@"{DataObjects.PathDestDir}\{subSystemObj.Name}\{subSystemObj.Name}_Prod_All_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
+            //subSystemObj.PathStendlistAllObj = $@"{DataObjects.PathDestDir}\{subSystemObj.Name}\{subSystemObj.Name}_Stend_All_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
+            //subSystemObj.PathlistDiff = $@"{DataObjects.PathDestDir}\{subSystemObj.Name}\{subSystemObj.Name}_Diff_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
 
             string confFull = "";
             OraDb db = new OraDb();
@@ -36,8 +56,6 @@ namespace SskAssistWF
             //File.AppendAllText(subSystemObj.PathProdlistAllObj, confFull);
             //var ConfigFullArr = File.ReadAllLines(subSystemObj.PathProdlistAllObj);
             //Parse.SetConfigStend(confFull, subSystemObj.Name);
-        }
-
-        
+        }        
     }
 }

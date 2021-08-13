@@ -6,6 +6,29 @@ namespace SskAssistWF
 {
     public static class Parse
     {
+        public static SortedSet<Server> GetListServers(string[] conf)
+        {
+            SortedSet<Server> servers = new SortedSet<Server>();
+
+            var serverNames = GetListObjects(conf, " serverName=", "status");
+            
+            foreach(var item in serverNames)
+            {
+                servers.Add(new Server(item));
+            }
+
+            foreach (var server in servers)
+            {
+
+                server.Apps = Parse.GetListObjects(conf, " appName=", server.Name);
+                server.Queues = Parse.GetListObjects(conf, " queueName=", server.Name);
+                server.Endpoints = Parse.GetListObjects(conf, "template=\"EndPoint", server.Name, true);
+                server.DataSources = Parse.GetListObjects(conf, " dsName=", server.Name);
+            }
+
+            return servers;
+        }
+
         public static SortedSet<string> GetListObjects(string[] configFull, string typeObj, string keyWord)
         {
             SortedSet<string> listObjects = new SortedSet<string>();
@@ -137,9 +160,67 @@ namespace SskAssistWF
             return list.ToArray();
         }
 
-        public static void GetConfigAdd(string[] config, List<string> list)
+        public static SortedSet<Server> GetServersUnicObjs(SortedSet<Server> prodAll, SortedSet<Server> stendAll)
         {
-
+            SortedSet<Server> prodUnic = new SortedSet<Server>();
+            
+            foreach (var itemProd in prodAll)
+            {
+                foreach (var itemStend in stendAll)
+                {
+                    if (itemProd.Name.TrimPrefDig().ToLower() == itemStend.Name.TrimPrefDig().ToLower())
+                    {
+                        Server server = new Server(itemProd.Name);
+                        
+                        server.Apps = GetListUnicObjs(itemProd.Apps, itemStend.Apps);
+                        server.Queues = GetListUnicObjs(itemProd.Queues, itemStend.Queues);
+                        server.Endpoints = GetListUnicObjs(itemProd.Endpoints, itemStend.Endpoints);
+                        server.DataSources = GetListUnicObjs(itemProd.DataSources, itemStend.DataSources);
+                    }
+                }
+            }
+            return prodUnic;
         }
+
+        private static SortedSet<string> GetListUnicObjs(SortedSet<string> objsPro, SortedSet<string> objsStend)
+        {
+            SortedSet<string> duplicateObjects = new SortedSet<string>();
+            var unicList = new SortedSet<string>(objsPro);
+
+            foreach (var itemProd in unicList)
+            {
+                foreach (var itemStend in objsStend)
+                {
+                    if (itemProd.TrimPrefDig() == itemStend.TrimPrefDig())
+                    {
+                        duplicateObjects.Add(itemProd.TrimPrefDig());
+                    }
+                }
+            }
+
+            unicList.RemoveWhere(item => duplicateObjects.Contains(item.TrimPrefDig()));
+            return unicList;
+        }
+
+        //public static void RemoveDublicates(SortedDictionary<string, Server> dictPro, SortedDictionary<string, Server> dictSst)
+        //{
+        //    foreach (var itemDictPro in dictPro)
+        //    {
+        //        foreach (var itemDictSst in dictSst)
+        //        {
+        //            if (itemDictPro.Key.TrimPrefDig().ToLower() == itemDictSst.Key.TrimPrefDig().ToLower())
+        //            {
+        //                RmObjects(itemDictPro.Value.Apps, itemDictSst.Value.Apps);
+        //                RmObjects(itemDictPro.Value.Queues, itemDictSst.Value.Queues);
+        //                RmObjects(itemDictPro.Value.Endpoints, itemDictSst.Value.Endpoints);
+        //                RmObjects(itemDictPro.Value.DataSources, itemDictSst.Value.DataSources);
+        //            }
+        //        }
+        //    }
+        //}
+
+
+
+
     }
 }

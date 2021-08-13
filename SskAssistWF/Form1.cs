@@ -16,22 +16,13 @@ namespace SskAssistWF
 {
     public partial class Form1 : Form
     {
-        DataObjects dataSbp = new DataObjects("Sbp");
-        DataObjects dataCkps = new DataObjects("Ckps");
-        DataObjects dataCos = new DataObjects("Cos");
-        DataObjects dataSdm = new DataObjects("Sdm");
-        DataObjects dataHdm = new DataObjects("Hdm");        
-        DataObjects dataManual = new DataObjects("Manual");
-        
-        //List<DataObjects> subSystems = new List<DataObjects>()
-        //{
-        //    new DataObjects("Ckps"),
-        //    new DataObjects("Cos"),
-        //    new DataObjects("Sbp"),
-        //    new DataObjects("Sdm"),
-        //    new DataObjects("Hdm"),
-        //    new DataObjects("Manual")
-        //};        
+        //DataObjects dataSbp = new DataObjects("Sbp");
+        //DataObjects dataCkps = new DataObjects("Ckps");
+        //DataObjects dataCos = new DataObjects("Cos");
+        //DataObjects dataSdm = new DataObjects("Sdm");
+        //DataObjects dataHdm = new DataObjects("Hdm");        
+        //DataObjects dataManual = new DataObjects("Manual");
+                       
 
         public Form1()
         {
@@ -42,26 +33,27 @@ namespace SskAssistWF
         {
             
         }
-        
+                
         private void btnChoosePro_Click(object sender, EventArgs e)
-        {   
+        {
             OpenFileDialog ofdPro = new OpenFileDialog();
-            ofdPro.ShowDialog();            
-            
+            ofdPro.ShowDialog();
+                        
             textBoxPathPro.Text = ofdPro.FileName;
             textBoxPathPro.Tag = ofdPro.SafeFileName;
-            DataObjects.PathConfProd[0] = ofdPro.FileName;
-            DataObjects.PathConfProd[1] = ofdPro.SafeFileName;
+            Data.PathToConfigFileProd[0] = ofdPro.FileName;
+            Data.PathToConfigFileProd[1] = ofdPro.SafeFileName;
         }
 
         private void BtnChooseSst_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofdSst = new OpenFileDialog();
             ofdSst.ShowDialog();
+
             textBoxPathSst.Text = ofdSst.FileName;      // полный путь до файла
             textBoxPathSst.Tag = ofdSst.SafeFileName;   // имя файла
-            DataObjects.PathConfStend[0] = ofdSst.FileName;
-            DataObjects.PathConfStend[1] = ofdSst.SafeFileName;
+            Data.PathToConfigFileStend[0] = ofdSst.FileName;
+            Data.PathToConfigFileStend[1] = ofdSst.SafeFileName;
         }
 
         private void btnChooseDest_Click(object sender, EventArgs e)
@@ -70,57 +62,93 @@ namespace SskAssistWF
             if (fbdDest.ShowDialog() == DialogResult.OK)
             {
                 textBoxPathDest.Text = fbdDest.SelectedPath;
-                DataObjects.PathDestDir = fbdDest.SelectedPath;
-            }            
+                Data.PathToDestDir = fbdDest.SelectedPath;
+            }
         }
+                
 
         private void btnGetDiff_Click(object sender, EventArgs e)
         {
             DateTime currrentDate = DateTime.Now;
-            var pathDestDir = $@"{DataObjects.PathDestDir}\Diff";
-            var pathProdObjects = $@"{pathDestDir}\Prod_All_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
-            var pathStendObjects = $@"{pathDestDir}\Stend_All_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
-            var pathDiffObjects   = $@"{pathDestDir}\Diff_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
-            var pathConfigProdDel = $@"{pathDestDir}\Prod_Config_Del_{currrentDate:yyyyMMdd_HHmm}.xml";
+            Data.CurrrentDate = currrentDate;
+            //var pathDestDir       = $@"{DataObjects.PathDestDir}\Diff";
+            var pathProdObjects   = $@"{DataObjects.PathDestDir}\Prod_All_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
+            var pathStendObjects  = $@"{DataObjects.PathDestDir}\Stend_All_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
+            var pathDiffObjects   = $@"{DataObjects.PathDestDir}\Diff_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
+            var pathConfigProdDel = $@"{DataObjects.PathDestDir}\Prod_Config_Del_{currrentDate:yyyyMMdd_HHmm}.xml";
 
             Print.CheckDir($@"{DataObjects.PathDestDir}\Diff\");
 
             // получение конфигов и списков серверов
-            var ObjectProd = new MyDataObject(textBoxPathPro.Text.ToString());
-            var ObjectStend = new MyDataObject(textBoxPathSst.Text.ToString());
+            var ServersProd = new MyDataObject(textBoxPathPro.Text.ToString());
+            var ServersStend = new MyDataObject(textBoxPathSst.Text.ToString());
             
-            ObjectProd.Servers.PrintServers("Prod", pathProdObjects);
-            ObjectStend.Servers.PrintServers("SST", pathStendObjects);
+            ServersProd.Servers.PrintServers("Prod", pathProdObjects);
+            ServersStend.Servers.PrintServers("SST", pathStendObjects);
             
             // создание и получение списка объектов по серверам                                
             SortedDictionary<string, Server> proServerObjects = new SortedDictionary<string, Server>();
-            foreach (var serverName in ObjectProd.Servers)
+            foreach (var serverName in ServersProd.Servers)
             {
-                proServerObjects.Add(serverName, new Server(serverName, ObjectProd.ConfigFull));
+                //proServerObjects.Add(serverName, new Server(serverName, ServersProd.ConfigFull));
             }
             
             SortedDictionary<string, Server> sstServerObjects = new SortedDictionary<string, Server>();
-            foreach (var serverName in ObjectStend.Servers)
+            foreach (var serverName in ServersStend.Servers)
             {
-                sstServerObjects.Add(serverName, new Server(serverName, ObjectStend.ConfigFull));
+                //sstServerObjects.Add(serverName, new Server(serverName, ServersStend.ConfigFull));
             }
             
             // вывод в файл полного списка объектов
-            proServerObjects.PrintAllObj(pathProdObjects, "Prod");
-            sstServerObjects.PrintAllObj(pathStendObjects, "SST");
+            //proServerObjects.PrintAllObj(pathProdObjects, "Prod");
+            //sstServerObjects.PrintAllObj(pathStendObjects, "SST");
             
             // удаление одинаковых объектов
             ComparerObjects.RemoveDublicates(proServerObjects, sstServerObjects);
             
             // вывод уникальных объектов
-            sstServerObjects.PrintAllObj(pathDiffObjects, "Added");
-            proServerObjects.PrintAllObj(pathDiffObjects, "Deleted");
+            //sstServerObjects.PrintAllObj(pathDiffObjects, "Added");
+            //proServerObjects.PrintAllObj(pathDiffObjects, "Deleted");
 
-            //Print.PrintConfigDel(ObjectProd.ConfigFullArr, destinationDir);
-            ObjectProd.ConfigFullDel = Parse.GetConfigDel(ObjectProd.ConfigFull, proServerObjects);
-            Print.PrintConfigDel(ObjectProd.ConfigFullDel, pathConfigProdDel);
+            //Print.PrintConfigDel(ServersProd.ConfigFullArr, destinationDir);
+            ServersProd.ConfigFullDel = Parse.GetConfigDel(ServersProd.ConfigFull, proServerObjects);
+            Print.PrintConfigDel(ServersProd.ConfigFullDel, pathConfigProdDel);
 
             Process.Start("explorer.exe", $@"{DataObjects.PathDestDir}\Diff");
+        }
+        
+        private void btnGetDiff_Click_1(object sender, EventArgs e)
+        {
+            // set time
+            //DateTime currrentDate = DateTime.Now;
+            //Data.CurrrentDate = DateTime.Now;
+            Data.UpdateFileNames(DateTime.Now);
+
+            // get configs from files
+            Data.ConfigProdFull =  DataImport.GetConfigFromFile(Data.PathToConfigFileProd[0]);
+            Data.ConfigStendFull = DataImport.GetConfigFromFile(Data.PathToConfigFileStend[0]);
+
+            // get servers and objects from array configs
+            Data.serversProdAll =  Parse.GetListServers(Data.ConfigProdFull);
+            Data.serversStendAll = Parse.GetListServers(Data.ConfigStendFull);
+
+                        
+            // export All objects to files
+            Print.CheckDir(Data.PathToDestDir);
+            Print.PrintAllObj(Data.serversProdAll, Data.PathToExpProdObjs, "Prod");
+            Print.PrintAllObj(Data.serversStendAll, Data.PathToExpStendObjs, "Stend");
+
+            // get unic objects
+            Data.serversProdUnic = Parse.GetServersUnicObjs(Data.serversProdAll, Data.serversStendAll);
+
+            //ComparerObjects.RemoveDublicates(proServerObjects, sstServerObjects);
+
+            Process.Start("explorer.exe", Data.PathToDestDir);
+        }
+        
+        private void btnGenNewConfig_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void btnRunSqlStend_Click(object sender, EventArgs e)
@@ -202,6 +230,8 @@ namespace SskAssistWF
             //    DataImport.GetDataFromDb(dataManual);
             //}
         }
+
+
 
         //private void button1_Click(object sender, EventArgs e)
         //{

@@ -13,20 +13,32 @@ namespace SskAssistWF
         {
             Name = name;
         }
+
         public static string[] PathConfProd { get; set; } = new string[2];
         public static string[] PathConfStend { get; set; } = new string[2];
-        public static string PathDestDir { get; set; }
-        //
+        public static string   PathDestDir { get; set; }
 
-        // -------------------------------------------------
+        
+        public static string pathDestDir { get; set; } = $@"{DataObjects.PathDestDir}\Diff";
+        
+        //
 
         public string Name { get; set; }
 
-        public string PathProdlistAllObj { get; set; }
-        public string PathProdlistUnicObj { get; set; }
+        public string[] PathToConfigFileProd { get; set; } = new string[2];
+        public string[] PathToConfigFileStend { get; set; } = new string[2];
+        public string PathToDestDir { get; set; } = @"c:\tmp\";
+        public DateTime CurrrentDate { get; set; }
+
+
+
+
+
+        public string ProdlistAllObj { get; set; }
+        public string ProdlistUnicObj { get; set; }
         
-        public string PathStendlistAllObj { get; set; }
-        public string PathStendlistUnicObj { get; set; }
+        public string StendlistAllObj { get; set; }
+        public string StendlistUnicObj { get; set; }
         
         public string PathlistDiff { get; set; }
 
