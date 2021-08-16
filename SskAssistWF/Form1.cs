@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Oracle.ManagedDataAccess.Client;
+using Newtonsoft.Json;
 
 
 namespace SskAssistWF
@@ -111,7 +112,7 @@ namespace SskAssistWF
             //proServerObjects.PrintAllObj(pathDiffObjects, "Deleted");
 
             //Print.PrintConfigDel(ServersProd.ConfigFullArr, destinationDir);
-            ServersProd.ConfigFullDel = Parse.GetConfigDel(ServersProd.ConfigFull, proServerObjects);
+            //ServersProd.ConfigFullDel = Parse.GetConfigDel(ServersProd.ConfigProdFull, proServerObjects);
             Print.PrintConfigDel(ServersProd.ConfigFullDel, pathConfigProdDel);
 
             Process.Start("explorer.exe", $@"{DataObjects.PathDestDir}\Diff");
@@ -120,8 +121,6 @@ namespace SskAssistWF
         private void btnGetDiff_Click_1(object sender, EventArgs e)
         {
             // set time
-            //DateTime currrentDate = DateTime.Now;
-            //Data.CurrrentDate = DateTime.Now;
             Data.UpdateFileNames(DateTime.Now);
 
             // get configs from files
@@ -131,24 +130,48 @@ namespace SskAssistWF
             // get servers and objects from array configs
             Data.serversProdAll =  Parse.GetListServers(Data.ConfigProdFull);
             Data.serversStendAll = Parse.GetListServers(Data.ConfigStendFull);
-
-                        
-            // export All objects to files
+            
+            // check dir
             Print.CheckDir(Data.PathToDestDir);
-            Print.PrintAllObj(Data.serversProdAll, Data.PathToExpProdObjs, "Prod");
-            Print.PrintAllObj(Data.serversStendAll, Data.PathToExpStendObjs, "Stend");
+
+            // export All objects to files
+            //Print.PrintAllObj(Data.serversProdAll, Data.PathToExpProdAllObjs, "Prod");
+            //Print.PrintAllObj(Data.serversStendAll, Data.PathToExpStendObjs, "Stend");
+            
+            // export all objects to json files
+            File.AppendAllText(Data.PathToExpProdUnicObjsJson, JsonConvert.SerializeObject(Data.serversProdUnic, Formatting.Indented));
+            File.AppendAllText(Data.PathToExpStendUnicObjsJson, JsonConvert.SerializeObject(Data.serversStendUnic, Formatting.Indented));
 
             // get unic objects
-            Data.serversProdUnic = Parse.GetServersUnicObjs(Data.serversProdAll, Data.serversStendAll);
+            Data.serversProdUnic  = Parse.GetServersUnicObjs(Data.serversProdAll,  Data.serversStendAll);
+            Data.serversStendUnic = Parse.GetServersUnicObjs(Data.serversStendAll, Data.serversProdAll);
 
-            //ComparerObjects.RemoveDublicates(proServerObjects, sstServerObjects);
+            // export unic objects
+            Print.PrintAllObj(Data.serversStendUnic, Data.PathToExpDiffObjs, "Added to Stend");
+            Print.PrintAllObj(Data.serversProdUnic, Data.PathToExpDiffObjs, "Deleted from Prod");
+                                                
+            // export unic objects to file.json            
+            File.AppendAllText(Data.PathToExpProdUnicObjsJson, JsonConvert.SerializeObject(Data.serversProdUnic, Formatting.Indented));
+            File.AppendAllText(Data.PathToExpStendUnicObjsJson, JsonConvert.SerializeObject(Data.serversStendUnic, Formatting.Indented));
 
             Process.Start("explorer.exe", Data.PathToDestDir);
         }
         
         private void btnGenNewConfig_Click(object sender, EventArgs e)
         {
+            try
+            {                
+                Data.serversProdUnic = JsonConvert.DeserializeObject<SortedSet<Server>>(File.ReadAllText(Data.PathToExpProdUnicObjsJson));
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
+            Data.ConfigProdDel = Parse.GetConfigDel(Data.ConfigProdFull, Data.serversProdUnic);
+            Print.PrintConfigDel(Data.ConfigProdDel, Data.PathToExpConfigProdDel);
+
+            Process.Start("explorer.exe", Data.PathToDestDir);
         }
 
         private void btnRunSqlStend_Click(object sender, EventArgs e)
@@ -243,9 +266,6 @@ namespace SskAssistWF
         //    radioButton1.Checked
         //}
 
-        //private void textBoxSqlStend_TextChanged(object sender, EventArgs e)
-        //{
-
-        //}
+        
     }
 }

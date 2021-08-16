@@ -54,11 +54,11 @@ namespace SskAssistWF
             // 
             // btnCheck
             // 
-            this.btnCheck.Location = new System.Drawing.Point(93, 135);
+            this.btnCheck.Location = new System.Drawing.Point(16, 135);
             this.btnCheck.Name = "btnCheck";
             this.btnCheck.Size = new System.Drawing.Size(64, 33);
             this.btnCheck.TabIndex = 0;
-            this.btnCheck.Text = "Diff";
+            this.btnCheck.Text = "old Diff";
             this.btnCheck.UseVisualStyleBackColor = true;
             this.btnCheck.Click += new System.EventHandler(this.btnGetDiff_Click);
             // 
@@ -242,21 +242,21 @@ namespace SskAssistWF
             // 
             // btnGenNewConfig
             // 
-            this.btnGenNewConfig.Location = new System.Drawing.Point(408, 135);
+            this.btnGenNewConfig.Location = new System.Drawing.Point(260, 135);
             this.btnGenNewConfig.Name = "btnGenNewConfig";
-            this.btnGenNewConfig.Size = new System.Drawing.Size(80, 33);
+            this.btnGenNewConfig.Size = new System.Drawing.Size(105, 33);
             this.btnGenNewConfig.TabIndex = 23;
-            this.btnGenNewConfig.Text = "NewConfig";
+            this.btnGenNewConfig.Text = "Get New Config";
             this.btnGenNewConfig.UseVisualStyleBackColor = true;
             this.btnGenNewConfig.Click += new System.EventHandler(this.btnGenNewConfig_Click);
             // 
             // btnGetDiff
             // 
-            this.btnGetDiff.Location = new System.Drawing.Point(184, 135);
+            this.btnGetDiff.Location = new System.Drawing.Point(119, 135);
             this.btnGetDiff.Name = "btnGetDiff";
             this.btnGetDiff.Size = new System.Drawing.Size(64, 33);
             this.btnGetDiff.TabIndex = 24;
-            this.btnGetDiff.Text = "Diff_new";
+            this.btnGetDiff.Text = "Compare";
             this.btnGetDiff.UseVisualStyleBackColor = true;
             this.btnGetDiff.Click += new System.EventHandler(this.btnGetDiff_Click_1);
             // 

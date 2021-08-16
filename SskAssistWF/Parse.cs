@@ -93,30 +93,30 @@ namespace SskAssistWF
             return Regex.Replace(str, @"\d", "");
         }
 
-        public static string[] GetConfigDel(string[] config, SortedDictionary<string, Server> dictStend)
+        public static string[] GetConfigDel(string[] config, SortedSet<Server> serversList)
         {            
             var list = new List<string>();
             var lineAdd = true;
 
             foreach(var line in config)
             {
-                foreach(var server in dictStend)
+                foreach(var server in serversList)
                 {
-                    foreach(var v in server.Value.Apps)
+                    foreach(var v in server.Apps)
                     {   
                         if (line.Contains(v) 
-                            && line.Contains(server.Key.TrimPrefDig())
+                            && line.Contains(server.Name.TrimPrefDig())
                             && line.Contains("appName="))
                         {
                             lineAdd = false;
                             break;
                         }                        
                     }
-                    foreach (var v in server.Value.Queues)
+                    foreach (var v in server.Queues)
 
                     {
                         if (line.Contains(v)
-                            && line.Contains(server.Key.Replace("Server", "Cluster").TrimPrefDig())
+                            && line.Contains(server.Name.Replace("Server", "Cluster").TrimPrefDig())
                             && line.Contains("queueName="))
                         {
                             lineAdd = false;
@@ -124,20 +124,20 @@ namespace SskAssistWF
                         }
                     }
                     
-                    foreach (var v in server.Value.Endpoints)
+                    foreach (var v in server.Endpoints)
                     {
                         if (line.Contains(v)
-                            && line.Contains(server.Key.TrimPrefDig()))
+                            && line.Contains(server.Name.TrimPrefDig()))
                         {
                             lineAdd = false;
                             break;
                         }
                     }
 
-                    foreach (var v in server.Value.DataSources)
+                    foreach (var v in server.DataSources)
                     {
                         if (   line.Contains(v)
-                            && line.Contains(server.Key.TrimPrefDig())
+                            && line.Contains(server.Name.TrimPrefDig())
                             && line.Contains("dsName="))
                         {
                             lineAdd = false;
@@ -160,26 +160,32 @@ namespace SskAssistWF
             return list.ToArray();
         }
 
-        public static SortedSet<Server> GetServersUnicObjs(SortedSet<Server> prodAll, SortedSet<Server> stendAll)
+        public static SortedSet<Server> GetServersUnicObjs(SortedSet<Server> serversList1, SortedSet<Server> ServersList2)
         {
-            SortedSet<Server> prodUnic = new SortedSet<Server>();
+            SortedSet<Server> serverList1Unic = new SortedSet<Server>();
             
-            foreach (var itemProd in prodAll)
+            foreach (var server1 in serversList1)
             {
-                foreach (var itemStend in stendAll)
+                foreach (var server2 in ServersList2)
                 {
-                    if (itemProd.Name.TrimPrefDig().ToLower() == itemStend.Name.TrimPrefDig().ToLower())
+                    if (server1.Name.TrimPrefDig().ToLower() == server2.Name.TrimPrefDig().ToLower())
                     {
-                        Server server = new Server(itemProd.Name);
+                        Server server = new Server(server1.Name);
+                        serverList1Unic.Add(server);
                         
-                        server.Apps = GetListUnicObjs(itemProd.Apps, itemStend.Apps);
-                        server.Queues = GetListUnicObjs(itemProd.Queues, itemStend.Queues);
-                        server.Endpoints = GetListUnicObjs(itemProd.Endpoints, itemStend.Endpoints);
-                        server.DataSources = GetListUnicObjs(itemProd.DataSources, itemStend.DataSources);
+                        server.Apps        = GetListUnicObjs(server1.Apps,        server2.Apps);
+                        server.Queues      = GetListUnicObjs(server1.Queues,      server2.Queues);
+                        server.Endpoints   = GetListUnicObjs(server1.Endpoints,   server2.Endpoints);
+                        server.DataSources = GetListUnicObjs(server1.DataSources, server2.DataSources);
                     }
                 }
             }
-            return prodUnic;
+            return serverList1Unic;
+        }
+
+        internal static void ToTree(this string str)
+        {
+            
         }
 
         private static SortedSet<string> GetListUnicObjs(SortedSet<string> objsPro, SortedSet<string> objsStend)
