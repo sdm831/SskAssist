@@ -51,8 +51,8 @@ namespace SskAssistWF
             OpenFileDialog ofdSst = new OpenFileDialog();
             ofdSst.ShowDialog();
 
-            textBoxPathSst.Text = ofdSst.FileName;      // полный путь до файла
-            textBoxPathSst.Tag = ofdSst.SafeFileName;   // имя файла
+            textBoxPathStend.Text = ofdSst.FileName;      // полный путь до файла
+            textBoxPathStend.Tag = ofdSst.SafeFileName;   // имя файла
             Data.PathToConfigFileStend[0] = ofdSst.FileName;
             Data.PathToConfigFileStend[1] = ofdSst.SafeFileName;
         }
@@ -65,67 +65,56 @@ namespace SskAssistWF
                 textBoxPathDest.Text = fbdDest.SelectedPath;
                 Data.PathToDestDir = fbdDest.SelectedPath;
             }
-        }
-                
+        }                
 
-        private void btnGetDiff_Click(object sender, EventArgs e)
-        {
-            DateTime currrentDate = DateTime.Now;
-            Data.CurrrentDate = currrentDate;
-            //var pathDestDir       = $@"{DataObjects.PathDestDir}\Diff";
-            var pathProdObjects   = $@"{DataObjects.PathDestDir}\Prod_All_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
-            var pathStendObjects  = $@"{DataObjects.PathDestDir}\Stend_All_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
-            var pathDiffObjects   = $@"{DataObjects.PathDestDir}\Diff_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
-            var pathConfigProdDel = $@"{DataObjects.PathDestDir}\Prod_Config_Del_{currrentDate:yyyyMMdd_HHmm}.xml";
-
-            Print.CheckDir($@"{DataObjects.PathDestDir}\Diff\");
-
-            // получение конфигов и списков серверов
-            var ServersProd = new MyDataObject(textBoxPathPro.Text.ToString());
-            var ServersStend = new MyDataObject(textBoxPathSst.Text.ToString());
-            
-            ServersProd.Servers.PrintServers("Prod", pathProdObjects);
-            ServersStend.Servers.PrintServers("SST", pathStendObjects);
-            
-            // создание и получение списка объектов по серверам                                
-            SortedDictionary<string, Server> proServerObjects = new SortedDictionary<string, Server>();
-            foreach (var serverName in ServersProd.Servers)
-            {
-                //proServerObjects.Add(serverName, new Server(serverName, ServersProd.ConfigFull));
-            }
-            
-            SortedDictionary<string, Server> sstServerObjects = new SortedDictionary<string, Server>();
-            foreach (var serverName in ServersStend.Servers)
-            {
-                //sstServerObjects.Add(serverName, new Server(serverName, ServersStend.ConfigFull));
-            }
-            
-            // вывод в файл полного списка объектов
-            //proServerObjects.PrintAllObj(pathProdObjects, "Prod");
-            //sstServerObjects.PrintAllObj(pathStendObjects, "SST");
-            
-            // удаление одинаковых объектов
-            ComparerObjects.RemoveDublicates(proServerObjects, sstServerObjects);
-            
-            // вывод уникальных объектов
-            //sstServerObjects.PrintAllObj(pathDiffObjects, "Added");
-            //proServerObjects.PrintAllObj(pathDiffObjects, "Deleted");
-
-            //Print.PrintConfigDel(ServersProd.ConfigFullArr, destinationDir);
-            //ServersProd.ConfigFullDel = Parse.GetConfigDel(ServersProd.ConfigProdFull, proServerObjects);
-            Print.PrintConfigDel(ServersProd.ConfigFullDel, pathConfigProdDel);
-
-            Process.Start("explorer.exe", $@"{DataObjects.PathDestDir}\Diff");
-        }
+        //private void btnGetDiff_Click(object sender, EventArgs e)
+        //{
+        //    DateTime currrentDate = DateTime.Now;
+        //    Data.CurrrentDate = currrentDate;
+        //    //var pathDestDir       = $@"{DataObjects.PathDestDir}\Diff";
+        //    var pathProdObjects   = $@"{DataObjects.PathDestDir}\Prod_All_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
+        //    var pathStendObjects  = $@"{DataObjects.PathDestDir}\Stend_All_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
+        //    var pathDiffObjects   = $@"{DataObjects.PathDestDir}\Diff_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
+        //    var pathConfigProdDel = $@"{DataObjects.PathDestDir}\Prod_Config_Del_{currrentDate:yyyyMMdd_HHmm}.xml";
+        //
+        //    Print.CheckDir($@"{DataObjects.PathDestDir}\Diff\");
+        //
+        //    // получение конфигов и списков серверов
+        //    var ServersProd = new MyDataObject(textBoxPathPro.Text.ToString());
+        //    var ServersStend = new MyDataObject(textBoxPathSst.Text.ToString());
+        //    
+        //    ServersProd.Servers.PrintServers("Prod", pathProdObjects);
+        //    ServersStend.Servers.PrintServers("SST", pathStendObjects);
+        //    
+        //    // создание и получение списка объектов по серверам                                
+        //    SortedDictionary<string, Server> proServerObjects = new SortedDictionary<string, Server>();
+        //    foreach (var serverName in ServersProd.Servers)
+        //    {
+        //        //proServerObjects.Add(serverName, new Server(serverName, ServersProd.ConfigFull));
+        //    }
+        //    
+        //    SortedDictionary<string, Server> sstServerObjects = new SortedDictionary<string, Server>();
+        //    foreach (var serverName in ServersStend.Servers)
+        //    {
+        //        //sstServerObjects.Add(serverName, new Server(serverName, ServersStend.ConfigFull));
+        //    }
+        //                
+        //    // удаление одинаковых объектов
+        //    ComparerObjects.RemoveDublicates(proServerObjects, sstServerObjects);
+        //                
+        //    Print.PrintConfigDel(ServersProd.ConfigFullDel, pathConfigProdDel);
+        //
+        //    Process.Start("explorer.exe", $@"{DataObjects.PathDestDir}\Diff");
+        //}
         
-        private void btnGetDiff_Click_1(object sender, EventArgs e)
+        private void btnCompare_Click(object sender, EventArgs e)
         {
             // set time
             Data.UpdateFileNames(DateTime.Now);
 
             // get configs from files
-            Data.ConfigProdFull =  DataImport.GetConfigFromFile(Data.PathToConfigFileProd[0]);
-            Data.ConfigStendFull = DataImport.GetConfigFromFile(Data.PathToConfigFileStend[0]);
+            Data.ConfigProdFull =  Data.GetConfigFromFile(Data.PathToConfigFileProd[0]);
+            Data.ConfigStendFull = Data.GetConfigFromFile(Data.PathToConfigFileStend[0]);
 
             // get servers and objects from array configs
             Data.serversProdAll =  Parse.GetListServers(Data.ConfigProdFull);
@@ -133,26 +122,21 @@ namespace SskAssistWF
             
             // check dir
             Print.CheckDir(Data.PathToDestDir);
-
-            // export All objects to files
-            //Print.PrintAllObj(Data.serversProdAll, Data.PathToExpProdAllObjs, "Prod");
-            //Print.PrintAllObj(Data.serversStendAll, Data.PathToExpStendObjs, "Stend");
-            
+                        
             // export all objects to json files
-            File.AppendAllText(Data.PathToExpProdUnicObjsJson, JsonConvert.SerializeObject(Data.serversProdUnic, Formatting.Indented));
-            File.AppendAllText(Data.PathToExpStendUnicObjsJson, JsonConvert.SerializeObject(Data.serversStendUnic, Formatting.Indented));
+            File.AppendAllText(Data.PathToExpProdAllObjsJson,  JsonConvert.SerializeObject(Data.serversProdAll, Formatting.Indented));
+            File.AppendAllText(Data.PathToExpStendAllObjsJson, JsonConvert.SerializeObject(Data.serversStendAll, Formatting.Indented));
 
             // get unic objects
             Data.serversProdUnic  = Parse.GetServersUnicObjs(Data.serversProdAll,  Data.serversStendAll);
             Data.serversStendUnic = Parse.GetServersUnicObjs(Data.serversStendAll, Data.serversProdAll);
 
-            // export unic objects
-            Print.PrintAllObj(Data.serversStendUnic, Data.PathToExpDiffObjs, "Added to Stend");
-            Print.PrintAllObj(Data.serversProdUnic, Data.PathToExpDiffObjs, "Deleted from Prod");
-                                                
-            // export unic objects to file.json            
-            File.AppendAllText(Data.PathToExpProdUnicObjsJson, JsonConvert.SerializeObject(Data.serversProdUnic, Formatting.Indented));
-            File.AppendAllText(Data.PathToExpStendUnicObjsJson, JsonConvert.SerializeObject(Data.serversStendUnic, Formatting.Indented));
+            // add to dictionary for export to json
+            Data.dictDiffObjs.Clear();
+            Data.dictDiffObjs.Add("Added to Stend", Data.serversStendUnic);
+            Data.dictDiffObjs.Add("Deleted from Prod", Data.serversStendUnic);
+                                    
+            File.AppendAllText(Data.PathToExpDiffObjsJson, JsonConvert.SerializeObject(Data.dictDiffObjs, Formatting.Indented));
 
             Process.Start("explorer.exe", Data.PathToDestDir);
         }
@@ -160,16 +144,25 @@ namespace SskAssistWF
         private void btnGenNewConfig_Click(object sender, EventArgs e)
         {
             try
-            {                
-                Data.serversProdUnic = JsonConvert.DeserializeObject<SortedSet<Server>>(File.ReadAllText(Data.PathToExpProdUnicObjsJson));
+            {
+                Data.dictDiffObjs = JsonConvert.DeserializeObject<Dictionary<string, SortedSet<Server>>>(File.ReadAllText(Data.PathToExpDiffObjsJson));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+                  
+            Data.serversProdUnic  = Data.dictDiffObjs["Added to Stend"];
+            Data.serversStendUnic = Data.dictDiffObjs["Deleted from Prod"];
 
+            // get config "Del"
             Data.ConfigProdDel = Parse.GetConfigDel(Data.ConfigProdFull, Data.serversProdUnic);
+
+            // export config *_Del_* to file
             Print.PrintConfigDel(Data.ConfigProdDel, Data.PathToExpConfigProdDel);
+
+            // get config "Add" 
+            Data.ConfigProdAdd = Parse.GetConfigAdd(Data.ConfigProdDel, Data.serversStendUnic);
 
             Process.Start("explorer.exe", Data.PathToDestDir);
         }
@@ -232,8 +225,8 @@ namespace SskAssistWF
             }
         }
 
-        private void btnGetData_Click(object sender, EventArgs e)
-        {
+        //private void btnGetData_Click(object sender, EventArgs e)
+        //{
             //if(radioBtnFromDb.Checked == false && radioBtnFromFiles.Checked == false)
             //{
             //    MessageBox.Show("subSystem is not checked");
@@ -252,20 +245,6 @@ namespace SskAssistWF
             //{
             //    DataImport.GetDataFromDb(dataManual);
             //}
-        }
-
-
-
-        //private void button1_Click(object sender, EventArgs e)
-        //{
-
-        //}
-
-        //private void radioButton1_CheckedChanged(object sender, EventArgs e)
-        //{
-        //    radioButton1.Checked
-        //}
-
-        
+        //}        
     }
 }

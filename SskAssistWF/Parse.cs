@@ -93,12 +93,12 @@ namespace SskAssistWF
             return Regex.Replace(str, @"\d", "");
         }
 
-        public static string[] GetConfigDel(string[] config, SortedSet<Server> serversList)
+        public static string[] GetConfigDel(string[] configArr, SortedSet<Server> serversList)
         {            
             var list = new List<string>();
             var lineAdd = true;
 
-            foreach(var line in config)
+            foreach(var line in configArr)
             {
                 foreach(var server in serversList)
                 {
@@ -159,6 +159,23 @@ namespace SskAssistWF
             }
             return list.ToArray();
         }
+        internal static string[] GetConfigAdd(string[] configArr, SortedSet<Server> serversList)
+        {
+            var list = new List<string>();
+
+            foreach (var line in configArr)
+            {
+                foreach (var server in serversList)
+                {
+                    foreach (var v in server.Apps)
+                    {
+
+                    }
+                }
+            }
+
+            return list.ToArray();
+        }
 
         public static SortedSet<Server> GetServersUnicObjs(SortedSet<Server> serversList1, SortedSet<Server> ServersList2)
         {
@@ -179,7 +196,7 @@ namespace SskAssistWF
                         server.DataSources = GetListUnicObjs(server1.DataSources, server2.DataSources);
                     }
                 }
-            }
+            }            
             return serverList1Unic;
         }
 
@@ -207,6 +224,7 @@ namespace SskAssistWF
             unicList.RemoveWhere(item => duplicateObjects.Contains(item.TrimPrefDig()));
             return unicList;
         }
+
 
         //public static void RemoveDublicates(SortedDictionary<string, Server> dictPro, SortedDictionary<string, Server> dictSst)
         //{

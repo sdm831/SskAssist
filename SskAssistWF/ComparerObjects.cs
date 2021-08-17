@@ -13,9 +13,9 @@ namespace SskAssistWF
                 {
                     if (itemDictPro.Key.TrimPrefDig().ToLower() == itemDictSst.Key.TrimPrefDig().ToLower())
                     {
-                        RmObjects(itemDictPro.Value.Apps, itemDictSst.Value.Apps);
-                        RmObjects(itemDictPro.Value.Queues, itemDictSst.Value.Queues);
-                        RmObjects(itemDictPro.Value.Endpoints, itemDictSst.Value.Endpoints);
+                        RmObjects(itemDictPro.Value.Apps,        itemDictSst.Value.Apps);
+                        RmObjects(itemDictPro.Value.Queues,      itemDictSst.Value.Queues);
+                        RmObjects(itemDictPro.Value.Endpoints,   itemDictSst.Value.Endpoints);
                         RmObjects(itemDictPro.Value.DataSources, itemDictSst.Value.DataSources);
                     }
                 }

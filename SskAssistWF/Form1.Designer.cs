@@ -29,8 +29,7 @@ namespace SskAssistWF
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnCheck = new System.Windows.Forms.Button();
-            this.textBoxPathSst = new System.Windows.Forms.TextBox();
+            this.textBoxPathStend = new System.Windows.Forms.TextBox();
             this.textBoxPathPro = new System.Windows.Forms.TextBox();
             this.textBoxPathDest = new System.Windows.Forms.TextBox();
             this.btnChooseSst = new System.Windows.Forms.Button();
@@ -49,26 +48,19 @@ namespace SskAssistWF
             this.comboBoxChooseSystem = new System.Windows.Forms.ComboBox();
             this.btnGetData = new System.Windows.Forms.Button();
             this.btnGenNewConfig = new System.Windows.Forms.Button();
-            this.btnGetDiff = new System.Windows.Forms.Button();
+            this.btnCompare = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // btnCheck
+            // textBoxPathStend
             // 
-            this.btnCheck.Location = new System.Drawing.Point(16, 135);
-            this.btnCheck.Name = "btnCheck";
-            this.btnCheck.Size = new System.Drawing.Size(64, 33);
-            this.btnCheck.TabIndex = 0;
-            this.btnCheck.Text = "old Diff";
-            this.btnCheck.UseVisualStyleBackColor = true;
-            this.btnCheck.Click += new System.EventHandler(this.btnGetDiff_Click);
-            // 
-            // textBoxPathSst
-            // 
-            this.textBoxPathSst.Location = new System.Drawing.Point(41, 100);
-            this.textBoxPathSst.Name = "textBoxPathSst";
-            this.textBoxPathSst.Size = new System.Drawing.Size(485, 20);
-            this.textBoxPathSst.TabIndex = 1;
-            this.textBoxPathSst.Text = "choose SST config";
+            this.textBoxPathStend.Location = new System.Drawing.Point(41, 100);
+            this.textBoxPathStend.Name = "textBoxPathStend";
+            this.textBoxPathStend.Size = new System.Drawing.Size(485, 20);
+            this.textBoxPathStend.TabIndex = 1;
+            this.textBoxPathStend.Text = "choose SST config";
             // 
             // textBoxPathPro
             // 
@@ -83,7 +75,7 @@ namespace SskAssistWF
             // 
             this.textBoxPathDest.Location = new System.Drawing.Point(119, 36);
             this.textBoxPathDest.Name = "textBoxPathDest";
-            this.textBoxPathDest.Size = new System.Drawing.Size(485, 20);
+            this.textBoxPathDest.Size = new System.Drawing.Size(407, 20);
             this.textBoxPathDest.TabIndex = 3;
             this.textBoxPathDest.Text = "choose destination directory";
             // 
@@ -118,7 +110,7 @@ namespace SskAssistWF
             // 
             // btnChooseDest
             // 
-            this.btnChooseDest.Location = new System.Drawing.Point(610, 36);
+            this.btnChooseDest.Location = new System.Drawing.Point(533, 36);
             this.btnChooseDest.Name = "btnChooseDest";
             this.btnChooseDest.Size = new System.Drawing.Size(23, 20);
             this.btnChooseDest.TabIndex = 7;
@@ -238,34 +230,63 @@ namespace SskAssistWF
             this.btnGetData.TabIndex = 22;
             this.btnGetData.Text = "getData";
             this.btnGetData.UseVisualStyleBackColor = true;
-            this.btnGetData.Click += new System.EventHandler(this.btnGetData_Click);
+            //this.btnGetData.Click += new System.EventHandler(this.btnGetData_Click);
             // 
             // btnGenNewConfig
             // 
-            this.btnGenNewConfig.Location = new System.Drawing.Point(260, 135);
+            this.btnGenNewConfig.Location = new System.Drawing.Point(528, 171);
             this.btnGenNewConfig.Name = "btnGenNewConfig";
-            this.btnGenNewConfig.Size = new System.Drawing.Size(105, 33);
+            this.btnGenNewConfig.Size = new System.Drawing.Size(105, 26);
             this.btnGenNewConfig.TabIndex = 23;
             this.btnGenNewConfig.Text = "Get New Config";
             this.btnGenNewConfig.UseVisualStyleBackColor = true;
             this.btnGenNewConfig.Click += new System.EventHandler(this.btnGenNewConfig_Click);
             // 
-            // btnGetDiff
+            // btnCompare
             // 
-            this.btnGetDiff.Location = new System.Drawing.Point(119, 135);
-            this.btnGetDiff.Name = "btnGetDiff";
-            this.btnGetDiff.Size = new System.Drawing.Size(64, 33);
-            this.btnGetDiff.TabIndex = 24;
-            this.btnGetDiff.Text = "Compare";
-            this.btnGetDiff.UseVisualStyleBackColor = true;
-            this.btnGetDiff.Click += new System.EventHandler(this.btnGetDiff_Click_1);
+            this.btnCompare.Location = new System.Drawing.Point(569, 82);
+            this.btnCompare.Name = "btnCompare";
+            this.btnCompare.Size = new System.Drawing.Size(64, 33);
+            this.btnCompare.TabIndex = 24;
+            this.btnCompare.Text = "Compare";
+            this.btnCompare.UseVisualStyleBackColor = true;
+            this.btnCompare.Click += new System.EventHandler(this.btnCompare_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(11, 176);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(23, 13);
+            this.label2.TabIndex = 27;
+            this.label2.Text = "Diff";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(499, 174);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(23, 20);
+            this.button1.TabIndex = 26;
+            this.button1.Text = "...";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(41, 174);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(452, 20);
+            this.textBox1.TabIndex = 25;
+            this.textBox1.Text = "choose Diff file";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(653, 497);
-            this.Controls.Add(this.btnGetDiff);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.btnCompare);
             this.Controls.Add(this.btnGenNewConfig);
             this.Controls.Add(this.btnGetData);
             this.Controls.Add(this.comboBoxChooseSystem);
@@ -284,8 +305,7 @@ namespace SskAssistWF
             this.Controls.Add(this.btnChooseSst);
             this.Controls.Add(this.textBoxPathDest);
             this.Controls.Add(this.textBoxPathPro);
-            this.Controls.Add(this.textBoxPathSst);
-            this.Controls.Add(this.btnCheck);
+            this.Controls.Add(this.textBoxPathStend);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -295,9 +315,7 @@ namespace SskAssistWF
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnCheck;
-        private System.Windows.Forms.TextBox textBoxPathSst;
+        private System.Windows.Forms.TextBox textBoxPathStend;
         private System.Windows.Forms.TextBox textBoxPathPro;
         private System.Windows.Forms.TextBox textBoxPathDest;
         private System.Windows.Forms.Button btnChooseSst;
@@ -316,7 +334,10 @@ namespace SskAssistWF
         private System.Windows.Forms.ComboBox comboBoxChooseSystem;
         private System.Windows.Forms.Button btnGetData;
         private System.Windows.Forms.Button btnGenNewConfig;
-        private System.Windows.Forms.Button btnGetDiff;
+        private System.Windows.Forms.Button btnCompare;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 
