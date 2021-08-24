@@ -87,7 +87,7 @@ namespace SskAssistWF
             File.AppendAllText(path, $"\n", Print.ISO88595);
         }
 
-        public static void PrintConfigDel(string[] config, string path)
+        public static void PrintConfig(string[] config, string path)
         {
             foreach(var line in config)
             {                

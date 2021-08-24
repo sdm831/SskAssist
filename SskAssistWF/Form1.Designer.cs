@@ -29,15 +29,15 @@ namespace SskAssistWF
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBoxPathStend = new System.Windows.Forms.TextBox();
-            this.textBoxPathPro = new System.Windows.Forms.TextBox();
+            this.textBoxPathNew = new System.Windows.Forms.TextBox();
+            this.textBoxPathOld = new System.Windows.Forms.TextBox();
             this.textBoxPathDest = new System.Windows.Forms.TextBox();
             this.btnChooseSst = new System.Windows.Forms.Button();
             this.btnChoosePro = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.btnChooseDest = new System.Windows.Forms.Button();
-            this.labelPro = new System.Windows.Forms.Label();
-            this.labelSst = new System.Windows.Forms.Label();
+            this.labelOld = new System.Windows.Forms.Label();
+            this.labelNew = new System.Windows.Forms.Label();
             this.labelDest = new System.Windows.Forms.Label();
             this.textBoxSqlStend = new System.Windows.Forms.TextBox();
             this.btnRunSqlStend = new System.Windows.Forms.Button();
@@ -50,48 +50,48 @@ namespace SskAssistWF
             this.btnGenNewConfig = new System.Windows.Forms.Button();
             this.btnCompare = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.btnChooseDiff = new System.Windows.Forms.Button();
+            this.textBoxPathDiff = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // textBoxPathStend
+            // textBoxPathNew
             // 
-            this.textBoxPathStend.Location = new System.Drawing.Point(41, 100);
-            this.textBoxPathStend.Name = "textBoxPathStend";
-            this.textBoxPathStend.Size = new System.Drawing.Size(485, 20);
-            this.textBoxPathStend.TabIndex = 1;
-            this.textBoxPathStend.Text = "choose SST config";
+            this.textBoxPathNew.Location = new System.Drawing.Point(41, 100);
+            this.textBoxPathNew.Name = "textBoxPathNew";
+            this.textBoxPathNew.Size = new System.Drawing.Size(674, 20);
+            this.textBoxPathNew.TabIndex = 1;
+            this.textBoxPathNew.Text = "choose New config";
             // 
-            // textBoxPathPro
+            // textBoxPathOld
             // 
-            this.textBoxPathPro.Location = new System.Drawing.Point(41, 74);
-            this.textBoxPathPro.Name = "textBoxPathPro";
-            this.textBoxPathPro.Size = new System.Drawing.Size(485, 20);
-            this.textBoxPathPro.TabIndex = 2;
-            this.textBoxPathPro.Tag = "tag";
-            this.textBoxPathPro.Text = "choose Prod config";
+            this.textBoxPathOld.Location = new System.Drawing.Point(41, 74);
+            this.textBoxPathOld.Name = "textBoxPathOld";
+            this.textBoxPathOld.Size = new System.Drawing.Size(674, 20);
+            this.textBoxPathOld.TabIndex = 2;
+            this.textBoxPathOld.Tag = "tag";
+            this.textBoxPathOld.Text = "choose Old config";
             // 
             // textBoxPathDest
             // 
             this.textBoxPathDest.Location = new System.Drawing.Point(119, 36);
             this.textBoxPathDest.Name = "textBoxPathDest";
-            this.textBoxPathDest.Size = new System.Drawing.Size(407, 20);
+            this.textBoxPathDest.Size = new System.Drawing.Size(596, 20);
             this.textBoxPathDest.TabIndex = 3;
             this.textBoxPathDest.Text = "choose destination directory";
             // 
             // btnChooseSst
             // 
-            this.btnChooseSst.Location = new System.Drawing.Point(533, 100);
+            this.btnChooseSst.Location = new System.Drawing.Point(721, 100);
             this.btnChooseSst.Name = "btnChooseSst";
             this.btnChooseSst.Size = new System.Drawing.Size(23, 20);
             this.btnChooseSst.TabIndex = 4;
             this.btnChooseSst.Text = "...";
             this.btnChooseSst.UseVisualStyleBackColor = true;
-            this.btnChooseSst.Click += new System.EventHandler(this.BtnChooseSst_Click);
+            this.btnChooseSst.Click += new System.EventHandler(this.BtnChooseNew_Click);
             // 
             // btnChoosePro
             // 
-            this.btnChoosePro.Location = new System.Drawing.Point(533, 74);
+            this.btnChoosePro.Location = new System.Drawing.Point(721, 74);
             this.btnChoosePro.Name = "btnChoosePro";
             this.btnChoosePro.Size = new System.Drawing.Size(23, 20);
             this.btnChoosePro.TabIndex = 5;
@@ -110,7 +110,7 @@ namespace SskAssistWF
             // 
             // btnChooseDest
             // 
-            this.btnChooseDest.Location = new System.Drawing.Point(533, 36);
+            this.btnChooseDest.Location = new System.Drawing.Point(721, 36);
             this.btnChooseDest.Name = "btnChooseDest";
             this.btnChooseDest.Size = new System.Drawing.Size(23, 20);
             this.btnChooseDest.TabIndex = 7;
@@ -118,23 +118,23 @@ namespace SskAssistWF
             this.btnChooseDest.UseVisualStyleBackColor = true;
             this.btnChooseDest.Click += new System.EventHandler(this.btnChooseDest_Click);
             // 
-            // labelPro
+            // labelOld
             // 
-            this.labelPro.AutoSize = true;
-            this.labelPro.Location = new System.Drawing.Point(9, 76);
-            this.labelPro.Name = "labelPro";
-            this.labelPro.Size = new System.Drawing.Size(32, 13);
-            this.labelPro.TabIndex = 8;
-            this.labelPro.Text = "Prod:";
+            this.labelOld.AutoSize = true;
+            this.labelOld.Location = new System.Drawing.Point(11, 77);
+            this.labelOld.Name = "labelOld";
+            this.labelOld.Size = new System.Drawing.Size(26, 13);
+            this.labelOld.TabIndex = 8;
+            this.labelOld.Text = "Old:";
             // 
-            // labelSst
+            // labelNew
             // 
-            this.labelSst.AutoSize = true;
-            this.labelSst.Location = new System.Drawing.Point(11, 102);
-            this.labelSst.Name = "labelSst";
-            this.labelSst.Size = new System.Drawing.Size(28, 13);
-            this.labelSst.TabIndex = 9;
-            this.labelSst.Text = "SST";
+            this.labelNew.AutoSize = true;
+            this.labelNew.Location = new System.Drawing.Point(7, 103);
+            this.labelNew.Name = "labelNew";
+            this.labelNew.Size = new System.Drawing.Size(32, 13);
+            this.labelNew.TabIndex = 9;
+            this.labelNew.Text = "New:";
             // 
             // labelDest
             // 
@@ -147,66 +147,79 @@ namespace SskAssistWF
             // 
             // textBoxSqlStend
             // 
-            this.textBoxSqlStend.Location = new System.Drawing.Point(11, 285);
+            this.textBoxSqlStend.Enabled = false;
+            this.textBoxSqlStend.Location = new System.Drawing.Point(42, 172);
             this.textBoxSqlStend.Name = "textBoxSqlStend";
-            this.textBoxSqlStend.Size = new System.Drawing.Size(492, 20);
+            this.textBoxSqlStend.Size = new System.Drawing.Size(28, 20);
             this.textBoxSqlStend.TabIndex = 12;
             this.textBoxSqlStend.Text = "select * from monitor_stend.ism_model_status";
+            this.textBoxSqlStend.Visible = false;
             // 
             // btnRunSqlStend
             // 
-            this.btnRunSqlStend.Location = new System.Drawing.Point(523, 283);
+            this.btnRunSqlStend.Enabled = false;
+            this.btnRunSqlStend.Location = new System.Drawing.Point(137, 172);
             this.btnRunSqlStend.Name = "btnRunSqlStend";
-            this.btnRunSqlStend.Size = new System.Drawing.Size(103, 23);
+            this.btnRunSqlStend.Size = new System.Drawing.Size(56, 23);
             this.btnRunSqlStend.TabIndex = 13;
             this.btnRunSqlStend.Text = "Run sql (Stend)";
             this.btnRunSqlStend.UseVisualStyleBackColor = true;
+            this.btnRunSqlStend.Visible = false;
             this.btnRunSqlStend.Click += new System.EventHandler(this.btnRunSqlStend_Click);
             // 
             // btnRunSqlProd
             // 
-            this.btnRunSqlProd.Location = new System.Drawing.Point(523, 312);
+            this.btnRunSqlProd.Enabled = false;
+            this.btnRunSqlProd.Location = new System.Drawing.Point(76, 172);
             this.btnRunSqlProd.Name = "btnRunSqlProd";
-            this.btnRunSqlProd.Size = new System.Drawing.Size(103, 23);
+            this.btnRunSqlProd.Size = new System.Drawing.Size(55, 23);
             this.btnRunSqlProd.TabIndex = 16;
             this.btnRunSqlProd.Text = "Run sql (Prod)";
             this.btnRunSqlProd.UseVisualStyleBackColor = true;
+            this.btnRunSqlProd.Visible = false;
             this.btnRunSqlProd.Click += new System.EventHandler(this.btnRunSqlProd_Click);
             // 
             // textBoxSqlProd
             // 
-            this.textBoxSqlProd.Location = new System.Drawing.Point(11, 314);
+            this.textBoxSqlProd.Enabled = false;
+            this.textBoxSqlProd.Location = new System.Drawing.Point(8, 172);
             this.textBoxSqlProd.Name = "textBoxSqlProd";
-            this.textBoxSqlProd.Size = new System.Drawing.Size(492, 20);
+            this.textBoxSqlProd.Size = new System.Drawing.Size(28, 20);
             this.textBoxSqlProd.TabIndex = 15;
             this.textBoxSqlProd.Text = "select * from monitor_prod.ism_model_status";
+            this.textBoxSqlProd.Visible = false;
             // 
             // radioBtnFromDb
             // 
             this.radioBtnFromDb.AutoSize = true;
-            this.radioBtnFromDb.Location = new System.Drawing.Point(11, 354);
+            this.radioBtnFromDb.Enabled = false;
+            this.radioBtnFromDb.Location = new System.Drawing.Point(209, 172);
             this.radioBtnFromDb.Name = "radioBtnFromDb";
             this.radioBtnFromDb.Size = new System.Drawing.Size(63, 17);
             this.radioBtnFromDb.TabIndex = 19;
             this.radioBtnFromDb.TabStop = true;
             this.radioBtnFromDb.Text = "from DB";
             this.radioBtnFromDb.UseVisualStyleBackColor = true;
+            this.radioBtnFromDb.Visible = false;
             this.radioBtnFromDb.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // radioBtnFromFiles
             // 
             this.radioBtnFromFiles.AutoSize = true;
-            this.radioBtnFromFiles.Location = new System.Drawing.Point(11, 374);
+            this.radioBtnFromFiles.Enabled = false;
+            this.radioBtnFromFiles.Location = new System.Drawing.Point(209, 185);
             this.radioBtnFromFiles.Name = "radioBtnFromFiles";
             this.radioBtnFromFiles.Size = new System.Drawing.Size(69, 17);
             this.radioBtnFromFiles.TabIndex = 20;
             this.radioBtnFromFiles.TabStop = true;
             this.radioBtnFromFiles.Text = "from Files";
             this.radioBtnFromFiles.UseVisualStyleBackColor = true;
+            this.radioBtnFromFiles.Visible = false;
             this.radioBtnFromFiles.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // comboBoxChooseSystem
             // 
+            this.comboBoxChooseSystem.Enabled = false;
             this.comboBoxChooseSystem.FormattingEnabled = true;
             this.comboBoxChooseSystem.Items.AddRange(new object[] {
             "Sbp",
@@ -214,27 +227,29 @@ namespace SskAssistWF
             "Cos",
             "Sdm",
             "Hdm"});
-            this.comboBoxChooseSystem.Location = new System.Drawing.Point(93, 363);
+            this.comboBoxChooseSystem.Location = new System.Drawing.Point(291, 174);
             this.comboBoxChooseSystem.Name = "comboBoxChooseSystem";
             this.comboBoxChooseSystem.Size = new System.Drawing.Size(121, 21);
             this.comboBoxChooseSystem.TabIndex = 21;
             this.comboBoxChooseSystem.Tag = "";
             this.comboBoxChooseSystem.Text = "Choose system";
+            this.comboBoxChooseSystem.Visible = false;
             // 
             // btnGetData
             // 
+            this.btnGetData.Enabled = false;
             this.btnGetData.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnGetData.Location = new System.Drawing.Point(227, 357);
+            this.btnGetData.Location = new System.Drawing.Point(420, 171);
             this.btnGetData.Name = "btnGetData";
-            this.btnGetData.Size = new System.Drawing.Size(71, 35);
+            this.btnGetData.Size = new System.Drawing.Size(57, 27);
             this.btnGetData.TabIndex = 22;
             this.btnGetData.Text = "getData";
             this.btnGetData.UseVisualStyleBackColor = true;
-            //this.btnGetData.Click += new System.EventHandler(this.btnGetData_Click);
+            this.btnGetData.Visible = false;
             // 
             // btnGenNewConfig
             // 
-            this.btnGenNewConfig.Location = new System.Drawing.Point(528, 171);
+            this.btnGenNewConfig.Location = new System.Drawing.Point(528, 137);
             this.btnGenNewConfig.Name = "btnGenNewConfig";
             this.btnGenNewConfig.Size = new System.Drawing.Size(105, 26);
             this.btnGenNewConfig.TabIndex = 23;
@@ -244,7 +259,7 @@ namespace SskAssistWF
             // 
             // btnCompare
             // 
-            this.btnCompare.Location = new System.Drawing.Point(569, 82);
+            this.btnCompare.Location = new System.Drawing.Point(757, 82);
             this.btnCompare.Name = "btnCompare";
             this.btnCompare.Size = new System.Drawing.Size(64, 33);
             this.btnCompare.TabIndex = 24;
@@ -255,37 +270,38 @@ namespace SskAssistWF
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(11, 176);
+            this.label2.Location = new System.Drawing.Point(11, 142);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(23, 13);
             this.label2.TabIndex = 27;
             this.label2.Text = "Diff";
             // 
-            // button1
+            // btnChooseDiff
             // 
-            this.button1.Location = new System.Drawing.Point(499, 174);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(23, 20);
-            this.button1.TabIndex = 26;
-            this.button1.Text = "...";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnChooseDiff.Location = new System.Drawing.Point(499, 140);
+            this.btnChooseDiff.Name = "btnChooseDiff";
+            this.btnChooseDiff.Size = new System.Drawing.Size(23, 20);
+            this.btnChooseDiff.TabIndex = 26;
+            this.btnChooseDiff.Text = "...";
+            this.btnChooseDiff.UseVisualStyleBackColor = true;
+            this.btnChooseDiff.Click += new System.EventHandler(this.btnChooseDiff_Click);
             // 
-            // textBox1
+            // textBoxPathDiff
             // 
-            this.textBox1.Location = new System.Drawing.Point(41, 174);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(452, 20);
-            this.textBox1.TabIndex = 25;
-            this.textBox1.Text = "choose Diff file";
+            this.textBoxPathDiff.Location = new System.Drawing.Point(41, 140);
+            this.textBoxPathDiff.Name = "textBoxPathDiff";
+            this.textBoxPathDiff.Size = new System.Drawing.Size(452, 20);
+            this.textBoxPathDiff.TabIndex = 25;
+            this.textBoxPathDiff.Text = "choose Diff file";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(653, 497);
+            this.ClientSize = new System.Drawing.Size(834, 241);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.btnChooseDiff);
+            this.Controls.Add(this.textBoxPathDiff);
             this.Controls.Add(this.btnCompare);
             this.Controls.Add(this.btnGenNewConfig);
             this.Controls.Add(this.btnGetData);
@@ -297,15 +313,15 @@ namespace SskAssistWF
             this.Controls.Add(this.btnRunSqlStend);
             this.Controls.Add(this.textBoxSqlStend);
             this.Controls.Add(this.labelDest);
-            this.Controls.Add(this.labelSst);
-            this.Controls.Add(this.labelPro);
+            this.Controls.Add(this.labelNew);
+            this.Controls.Add(this.labelOld);
             this.Controls.Add(this.btnChooseDest);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnChoosePro);
             this.Controls.Add(this.btnChooseSst);
             this.Controls.Add(this.textBoxPathDest);
-            this.Controls.Add(this.textBoxPathPro);
-            this.Controls.Add(this.textBoxPathStend);
+            this.Controls.Add(this.textBoxPathOld);
+            this.Controls.Add(this.textBoxPathNew);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -315,15 +331,15 @@ namespace SskAssistWF
         }
 
         #endregion
-        private System.Windows.Forms.TextBox textBoxPathStend;
-        private System.Windows.Forms.TextBox textBoxPathPro;
+        private System.Windows.Forms.TextBox textBoxPathNew;
+        private System.Windows.Forms.TextBox textBoxPathOld;
         private System.Windows.Forms.TextBox textBoxPathDest;
         private System.Windows.Forms.Button btnChooseSst;
         private System.Windows.Forms.Button btnChoosePro;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnChooseDest;
-        private System.Windows.Forms.Label labelPro;
-        private System.Windows.Forms.Label labelSst;
+        private System.Windows.Forms.Label labelOld;
+        private System.Windows.Forms.Label labelNew;
         private System.Windows.Forms.Label labelDest;
         private System.Windows.Forms.TextBox textBoxSqlStend;
         private System.Windows.Forms.Button btnRunSqlStend;
@@ -336,8 +352,8 @@ namespace SskAssistWF
         private System.Windows.Forms.Button btnGenNewConfig;
         private System.Windows.Forms.Button btnCompare;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button btnChooseDiff;
+        private System.Windows.Forms.TextBox textBoxPathDiff;
     }
 }
 

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace SskAssistWF
 {
@@ -159,22 +161,97 @@ namespace SskAssistWF
             }
             return list.ToArray();
         }
-        internal static string[] GetConfigAdd(string[] configArr, SortedSet<Server> serversList)
+        
+        public static string[] GetConfigAdd(string[] configArr, SortedSet<Server> serversList)
         {
-            var list = new List<string>();
-
+            var newConfig = new List<string>();
+            var addedList = new List<string>();            
+            var currentServer = "";
+            
+            // перебор строк
             foreach (var line in configArr)
             {
-                foreach (var server in serversList)
+                if (line.Contains("serverName=") || line.Contains("appName=") || line.Contains("dsName=") || line.Contains("queueName=") || line.ToLower().Contains("endpoint"))
                 {
-                    foreach (var v in server.Apps)
-                    {
+                    currentServer = GetServerName(line);
 
+
+                    // перебор серверов
+                    foreach (var server in serversList)
+                    {
+                        // перебор приложений
+                        var appTag = "appName=";
+                        foreach (var app in server.Apps)
+                        {
+                            if (line.Contains(server.Name.TrimPrefDig()) && line.Contains(appTag))
+                            {
+                                var tmp2 = !addedList.Contains(currentServer);
+                                var tmp3 = GetSubstringReplace(line, "appName=");
+
+                                if (!addedList.Contains($"{currentServer},{app}"))
+                                {
+                                    newConfig.Add(line.Replace(GetSubstringReplace(line, appTag), app));
+                                    addedList.Add($"{currentServer},{app}");
+                                }
+                            }
+                        }
+
+                        // перебор datasources
+                        var dsTag = "dsName=";
+                        foreach (var ds in server.DataSources)
+                        {
+                            if (line.Contains(server.Name.TrimPrefDig()) && line.Contains(dsTag))
+                            {
+
+                                var tmp2 = !addedList.Contains(currentServer);
+                                var tmp3 = GetSubstringReplace(line, dsTag);
+
+                                if (!addedList.Contains($"{currentServer},{ds}"))
+                                {
+                                    newConfig.Add(line.Replace(GetSubstringReplace(line, dsTag), ds));
+                                    addedList.Add($"{currentServer},{ds}");
+                                }
+                            }
+                        }
                     }
                 }
-            }
 
-            return list.ToArray();
+                newConfig.Add(line);                
+            }
+            return newConfig.ToArray();
+        }
+
+        private static string GetServerName(string line)
+        {
+            int resultFindStart = line.IndexOf("Server=");
+            if (resultFindStart != -1)
+            {
+                int point1 = line.IndexOf('=', resultFindStart) + 1;
+                int point2 = line.IndexOf(',', point1);
+
+                try
+                {
+                    return line.Substring(point1, point2 - point1);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            return null;
+        }
+
+        public static string GetSubstringReplace(this string line, string keyWord)
+        {
+            int resultFindStart = line.IndexOf(keyWord);
+            if (resultFindStart != -1)
+            {
+                int point1 = line.IndexOf('"', resultFindStart) + 1;
+                int point2 = line.IndexOf('"', point1);
+
+                return line.Substring(point1, point2 - point1);
+            }
+            return null;
         }
 
         public static SortedSet<Server> GetServersUnicObjs(SortedSet<Server> serversList1, SortedSet<Server> ServersList2)
@@ -199,12 +276,7 @@ namespace SskAssistWF
             }            
             return serverList1Unic;
         }
-
-        internal static void ToTree(this string str)
-        {
-            
-        }
-
+        
         private static SortedSet<string> GetListUnicObjs(SortedSet<string> objsPro, SortedSet<string> objsStend)
         {
             SortedSet<string> duplicateObjects = new SortedSet<string>();

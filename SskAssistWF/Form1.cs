@@ -17,14 +17,6 @@ namespace SskAssistWF
 {
     public partial class Form1 : Form
     {
-        //DataObjects dataSbp = new DataObjects("Sbp");
-        //DataObjects dataCkps = new DataObjects("Ckps");
-        //DataObjects dataCos = new DataObjects("Cos");
-        //DataObjects dataSdm = new DataObjects("Sdm");
-        //DataObjects dataHdm = new DataObjects("Hdm");        
-        //DataObjects dataManual = new DataObjects("Manual");
-                       
-
         public Form1()
         {
             InitializeComponent();
@@ -37,24 +29,24 @@ namespace SskAssistWF
                 
         private void btnChoosePro_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofdPro = new OpenFileDialog();
-            ofdPro.ShowDialog();
+            OpenFileDialog ofdOld = new OpenFileDialog();
+            ofdOld.ShowDialog();
                         
-            textBoxPathPro.Text = ofdPro.FileName;
-            textBoxPathPro.Tag = ofdPro.SafeFileName;
-            Data.PathToConfigFileProd[0] = ofdPro.FileName;
-            Data.PathToConfigFileProd[1] = ofdPro.SafeFileName;
+            textBoxPathOld.Text = ofdOld.FileName;
+            textBoxPathOld.Tag = ofdOld.SafeFileName;
+            Data.PathToConfigFileOld[0] = ofdOld.FileName;
+            Data.PathToConfigFileOld[1] = ofdOld.SafeFileName;
         }
 
-        private void BtnChooseSst_Click(object sender, EventArgs e)
+        private void BtnChooseNew_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofdSst = new OpenFileDialog();
-            ofdSst.ShowDialog();
+            OpenFileDialog ofdNew = new OpenFileDialog();
+            ofdNew.ShowDialog();
 
-            textBoxPathStend.Text = ofdSst.FileName;      // полный путь до файла
-            textBoxPathStend.Tag = ofdSst.SafeFileName;   // имя файла
-            Data.PathToConfigFileStend[0] = ofdSst.FileName;
-            Data.PathToConfigFileStend[1] = ofdSst.SafeFileName;
+            textBoxPathNew.Text = ofdNew.FileName;      // полный путь до файла
+            textBoxPathNew.Tag = ofdNew.SafeFileName;   // имя файла
+            Data.PathToConfigFileStend[0] = ofdNew.FileName;
+            Data.PathToConfigFileStend[1] = ofdNew.SafeFileName;
         }
 
         private void btnChooseDest_Click(object sender, EventArgs e)
@@ -65,78 +57,52 @@ namespace SskAssistWF
                 textBoxPathDest.Text = fbdDest.SelectedPath;
                 Data.PathToDestDir = fbdDest.SelectedPath;
             }
-        }                
+        }
 
-        //private void btnGetDiff_Click(object sender, EventArgs e)
-        //{
-        //    DateTime currrentDate = DateTime.Now;
-        //    Data.CurrrentDate = currrentDate;
-        //    //var pathDestDir       = $@"{DataObjects.PathDestDir}\Diff";
-        //    var pathProdObjects   = $@"{DataObjects.PathDestDir}\Prod_All_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
-        //    var pathStendObjects  = $@"{DataObjects.PathDestDir}\Stend_All_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
-        //    var pathDiffObjects   = $@"{DataObjects.PathDestDir}\Diff_Objects_{currrentDate:yyyyMMdd_HHmm}.txt";
-        //    var pathConfigProdDel = $@"{DataObjects.PathDestDir}\Prod_Config_Del_{currrentDate:yyyyMMdd_HHmm}.xml";
-        //
-        //    Print.CheckDir($@"{DataObjects.PathDestDir}\Diff\");
-        //
-        //    // получение конфигов и списков серверов
-        //    var ServersProd = new MyDataObject(textBoxPathPro.Text.ToString());
-        //    var ServersStend = new MyDataObject(textBoxPathSst.Text.ToString());
-        //    
-        //    ServersProd.Servers.PrintServers("Prod", pathProdObjects);
-        //    ServersStend.Servers.PrintServers("SST", pathStendObjects);
-        //    
-        //    // создание и получение списка объектов по серверам                                
-        //    SortedDictionary<string, Server> proServerObjects = new SortedDictionary<string, Server>();
-        //    foreach (var serverName in ServersProd.Servers)
-        //    {
-        //        //proServerObjects.Add(serverName, new Server(serverName, ServersProd.ConfigFull));
-        //    }
-        //    
-        //    SortedDictionary<string, Server> sstServerObjects = new SortedDictionary<string, Server>();
-        //    foreach (var serverName in ServersStend.Servers)
-        //    {
-        //        //sstServerObjects.Add(serverName, new Server(serverName, ServersStend.ConfigFull));
-        //    }
-        //                
-        //    // удаление одинаковых объектов
-        //    ComparerObjects.RemoveDublicates(proServerObjects, sstServerObjects);
-        //                
-        //    Print.PrintConfigDel(ServersProd.ConfigFullDel, pathConfigProdDel);
-        //
-        //    Process.Start("explorer.exe", $@"{DataObjects.PathDestDir}\Diff");
-        //}
-        
+        private void btnChooseDiff_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofdDiff = new OpenFileDialog();
+            ofdDiff.ShowDialog();
+
+            textBoxPathDiff.Text = ofdDiff.FileName;      // полный путь до файла
+            textBoxPathDiff.Tag = ofdDiff.SafeFileName;   // имя файла
+            Data.PathToExpDiffObjsJson = ofdDiff.FileName;
+            //Data.PathToConfigFileStend[0] = ofdDiff.FileName;
+            //Data.PathToConfigFileStend[1] = ofdDiff.SafeFileName;
+        }
+                
         private void btnCompare_Click(object sender, EventArgs e)
         {
             // set time
             Data.UpdateFileNames(DateTime.Now);
 
             // get configs from files
-            Data.ConfigProdFull =  Data.GetConfigFromFile(Data.PathToConfigFileProd[0]);
-            Data.ConfigStendFull = Data.GetConfigFromFile(Data.PathToConfigFileStend[0]);
+            Data.ConfigOldFull = Data.GetConfigFromFile(Data.PathToConfigFileOld[0]);
+            Data.ConfigNewFull = Data.GetConfigFromFile(Data.PathToConfigFileStend[0]);
 
             // get servers and objects from array configs
-            Data.serversProdAll =  Parse.GetListServers(Data.ConfigProdFull);
-            Data.serversStendAll = Parse.GetListServers(Data.ConfigStendFull);
+            Data.serversOldAll = Parse.GetListServers(Data.ConfigOldFull);
+            Data.serversNewAll = Parse.GetListServers(Data.ConfigNewFull);
             
             // check dir
             Print.CheckDir(Data.PathToDestDir);
                         
             // export all objects to json files
-            File.AppendAllText(Data.PathToExpProdAllObjsJson,  JsonConvert.SerializeObject(Data.serversProdAll, Formatting.Indented));
-            File.AppendAllText(Data.PathToExpStendAllObjsJson, JsonConvert.SerializeObject(Data.serversStendAll, Formatting.Indented));
+            File.AppendAllText(Data.PathToExpOldAllObjsJson, JsonConvert.SerializeObject(Data.serversOldAll, Formatting.Indented));
+            File.AppendAllText(Data.PathToExpNewAllObjsJson, JsonConvert.SerializeObject(Data.serversNewAll, Formatting.Indented));
 
             // get unic objects
-            Data.serversProdUnic  = Parse.GetServersUnicObjs(Data.serversProdAll,  Data.serversStendAll);
-            Data.serversStendUnic = Parse.GetServersUnicObjs(Data.serversStendAll, Data.serversProdAll);
+            Data.serversOldUnic = Parse.GetServersUnicObjs(Data.serversOldAll, Data.serversNewAll);
+            Data.serversNewUnic = Parse.GetServersUnicObjs(Data.serversNewAll, Data.serversOldAll);
 
             // add to dictionary for export to json
             Data.dictDiffObjs.Clear();
-            Data.dictDiffObjs.Add("Added to Stend", Data.serversStendUnic);
-            Data.dictDiffObjs.Add("Deleted from Prod", Data.serversStendUnic);
+            Data.dictDiffObjs.Add("Added to New",     Data.serversNewUnic);
+            Data.dictDiffObjs.Add("Deleted from Old", Data.serversOldUnic);
                                     
             File.AppendAllText(Data.PathToExpDiffObjsJson, JsonConvert.SerializeObject(Data.dictDiffObjs, Formatting.Indented));
+
+            textBoxPathDiff.Text = Data.PathToExpDiffObjsJson;
 
             Process.Start("explorer.exe", Data.PathToDestDir);
         }
@@ -152,17 +118,20 @@ namespace SskAssistWF
                 MessageBox.Show(ex.Message);
             }
                   
-            Data.serversProdUnic  = Data.dictDiffObjs["Added to Stend"];
-            Data.serversStendUnic = Data.dictDiffObjs["Deleted from Prod"];
+            Data.serversNewUnic  = Data.dictDiffObjs["Added to New"];
+            Data.serversOldUnic  = Data.dictDiffObjs["Deleted from Old"];
 
             // get config "Del"
-            Data.ConfigProdDel = Parse.GetConfigDel(Data.ConfigProdFull, Data.serversProdUnic);
+            Data.ConfigOldDel = Parse.GetConfigDel(Data.ConfigOldFull, Data.serversOldUnic);
 
             // export config *_Del_* to file
-            Print.PrintConfigDel(Data.ConfigProdDel, Data.PathToExpConfigProdDel);
+            //Print.PrintConfig(Data.ConfigProdDel, Data.PathToExpConfigProdDel);
 
             // get config "Add" 
-            Data.ConfigProdAdd = Parse.GetConfigAdd(Data.ConfigProdDel, Data.serversStendUnic);
+            Data.ConfigOldAdd = Parse.GetConfigAdd(Data.ConfigOldDel, Data.serversNewUnic);
+
+            // export config *_Add_* to file
+            Print.PrintConfig(Data.ConfigOldAdd, Data.PathToExpConfigOldDelAdd);
 
             Process.Start("explorer.exe", Data.PathToDestDir);
         }
@@ -225,26 +194,28 @@ namespace SskAssistWF
             }
         }
 
+        
+
         //private void btnGetData_Click(object sender, EventArgs e)
         //{
-            //if(radioBtnFromDb.Checked == false && radioBtnFromFiles.Checked == false)
-            //{
-            //    MessageBox.Show("subSystem is not checked");
-            //}
-            //
-            //if (radioBtnFromDb.Checked == true)
-            //{
-            //    if (comboBoxChooseSystem.Text == "Sbp") { DataImport.GetDataFromDb(dataSbp); }
-            //    if (comboBoxChooseSystem.Text == "Ckps") { DataImport.GetDataFromDb(dataCkps); }
-            //    if (comboBoxChooseSystem.Text == "Cos") { DataImport.GetDataFromDb(dataCos); }
-            //    if (comboBoxChooseSystem.Text == "Sdm") { DataImport.GetDataFromDb(dataSdm); }
-            //    if (comboBoxChooseSystem.Text == "Hdm") { DataImport.GetDataFromDb(dataHdm); }
-            //}
-            //
-            //if(radioBtnFromFiles.Checked == true)
-            //{
-            //    DataImport.GetDataFromDb(dataManual);
-            //}
+        //if(radioBtnFromDb.Checked == false && radioBtnFromFiles.Checked == false)
+        //{
+        //    MessageBox.Show("subSystem is not checked");
+        //}
+        //
+        //if (radioBtnFromDb.Checked == true)
+        //{
+        //    if (comboBoxChooseSystem.Text == "Sbp") { DataImport.GetDataFromDb(dataSbp); }
+        //    if (comboBoxChooseSystem.Text == "Ckps") { DataImport.GetDataFromDb(dataCkps); }
+        //    if (comboBoxChooseSystem.Text == "Cos") { DataImport.GetDataFromDb(dataCos); }
+        //    if (comboBoxChooseSystem.Text == "Sdm") { DataImport.GetDataFromDb(dataSdm); }
+        //    if (comboBoxChooseSystem.Text == "Hdm") { DataImport.GetDataFromDb(dataHdm); }
+        //}
+        //
+        //if(radioBtnFromFiles.Checked == true)
+        //{
+        //    DataImport.GetDataFromDb(dataManual);
+        //}
         //}        
     }
 }
