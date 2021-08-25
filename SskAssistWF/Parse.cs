@@ -56,7 +56,7 @@ namespace SskAssistWF
 
 
                                 // исключение дублированных систем (12,21,22) и ODR серверов
-                        if (!listObjects.Any(s => s.Contains(objName.TrimPrefDig())) && !objName.TrimPrefDig().ToLower().Contains("odr"))
+                        if (!listObjects.Any(s => s.Contains(objName)) && !objName.TrimPrefDig().ToLower().Contains("odr"))
                         {
                             listObjects.Add(objName);
                         }
@@ -260,18 +260,34 @@ namespace SskAssistWF
             
             foreach (var server1 in serversList1)
             {
+                var v = !ServersList2.Contains(server1);
+                if (!ServersList2.Contains(server1))
+                {
+                    serverList1Unic.Add(server1);
+                    continue;
+                }
+                
                 foreach (var server2 in ServersList2)
                 {
                     if (server1.Name.TrimPrefDig().ToLower() == server2.Name.TrimPrefDig().ToLower())
                     {
                         Server server = new Server(server1.Name);
-                        serverList1Unic.Add(server);
                         
                         server.Apps        = GetListUnicObjs(server1.Apps,        server2.Apps);
                         server.Queues      = GetListUnicObjs(server1.Queues,      server2.Queues);
                         server.Endpoints   = GetListUnicObjs(server1.Endpoints,   server2.Endpoints);
                         server.DataSources = GetListUnicObjs(server1.DataSources, server2.DataSources);
-                    }
+
+
+                        if (server.Apps.Count != 0 ||
+                            server.Queues.Count != 0 ||
+                            server.Endpoints.Count != 0 ||
+                            server.DataSources.Count != 0
+                            )
+                        {
+                            serverList1Unic.Add(server);
+                        }
+                    }                    
                 }
             }            
             return serverList1Unic;

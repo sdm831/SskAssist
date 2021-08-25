@@ -24,7 +24,7 @@ namespace SskAssistWF
 
         public int CompareTo(Server other)
         {
-            return Name.CompareTo(other.Name);
+            return Name.ToLower().TrimPrefDig().CompareTo(other.Name.ToLower().TrimPrefDig());
         }  
     }
 }
