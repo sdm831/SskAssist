@@ -293,23 +293,23 @@ namespace SskAssistWF
             return serverList1Unic;
         }
         
-        private static SortedSet<string> GetListUnicObjs(SortedSet<string> objsPro, SortedSet<string> objsStend)
+        private static SortedSet<string> GetListUnicObjs(SortedSet<string> objsOld, SortedSet<string> objsNew)
         {
             SortedSet<string> duplicateObjects = new SortedSet<string>();
-            var unicList = new SortedSet<string>(objsPro);
+            var unicList = new SortedSet<string>(objsOld);
 
-            foreach (var itemProd in unicList)
+            foreach (var itemOld in unicList)
             {
-                foreach (var itemStend in objsStend)
+                foreach (var itemNew in objsNew)
                 {
-                    if (itemProd.TrimPrefDig() == itemStend.TrimPrefDig())
+                    if (itemOld == itemNew)
                     {
-                        duplicateObjects.Add(itemProd.TrimPrefDig());
+                        duplicateObjects.Add(itemOld);
                     }
                 }
             }
 
-            unicList.RemoveWhere(item => duplicateObjects.Contains(item.TrimPrefDig()));
+            unicList.RemoveWhere(item => duplicateObjects.Contains(item));
             return unicList;
         }
 
