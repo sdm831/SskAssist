@@ -118,14 +118,14 @@ namespace SskAssistWF
                 MessageBox.Show(ex.Message);
             }
                   
-            Data.serversNewUnic  = Data.dictDiffObjs["Added to New"];
-            Data.serversOldUnic  = Data.dictDiffObjs["Deleted from Old"];
+            Data.serversNewUnic = Data.dictDiffObjs["Added to New"];
+            Data.serversOldUnic = Data.dictDiffObjs["Deleted from Old"];
 
             // get config "Del"
             Data.ConfigOldDel = Parse.GetConfigDel(Data.ConfigOldFull, Data.serversOldUnic);
 
             // export config *_Del_* to file
-            //Print.PrintConfig(Data.ConfigProdDel, Data.PathToExpConfigProdDel);
+            Print.PrintConfig(Data.ConfigOldDel, Data.PathToExpConfigProdDel);
 
             // get config "Add" 
             Data.ConfigOldAdd = Parse.GetConfigAdd(Data.ConfigOldDel, Data.serversNewUnic);

@@ -21,7 +21,6 @@ namespace SskAssistWF
 
             foreach (var server in servers)
             {
-
                 server.Apps = Parse.GetListObjects(conf, " appName=", server.Name);
                 server.Queues = Parse.GetListObjects(conf, " queueName=", server.Name);
                 server.Endpoints = Parse.GetListObjects(conf, "template=\"EndPoint", server.Name, true);
@@ -102,53 +101,61 @@ namespace SskAssistWF
 
             foreach(var line in configArr)
             {
-                foreach(var server in serversList)
+                foreach (var server in serversList)
                 {
-                    foreach(var v in server.Apps)
-                    {   
-                        if (line.Contains(v) 
-                            && line.Contains(server.Name.TrimPrefDig())
-                            && line.Contains("appName="))
+                            // check server for delete
+                    if (!(line.Contains(server.Name) && server.Unic))
+                    {
+                        foreach (var v in server.Apps)
                         {
-                            lineAdd = false;
-                            break;
-                        }                        
-                    }
-                    foreach (var v in server.Queues)
+                            if (line.Contains(v)
+                                && line.Contains(server.Name.TrimPrefDig())
+                                && line.Contains("appName="))
+                            {
+                                lineAdd = false;
+                                break;
+                            }
+                        }
+                        foreach (var v in server.Queues)
 
-                    {
-                        if (line.Contains(v)
-                            && line.Contains(server.Name.Replace("Server", "Cluster").TrimPrefDig())
-                            && line.Contains("queueName="))
                         {
-                            lineAdd = false;
-                            break;
+                            if (line.Contains(v)
+                                && line.Contains(server.Name.Replace("Server", "Cluster").TrimPrefDig())
+                                && line.Contains("queueName="))
+                            {
+                                lineAdd = false;
+                                break;
+                            }
                         }
-                    }
-                    
-                    foreach (var v in server.Endpoints)
-                    {
-                        if (line.Contains(v)
-                            && line.Contains(server.Name.TrimPrefDig()))
-                        {
-                            lineAdd = false;
-                            break;
-                        }
-                    }
 
-                    foreach (var v in server.DataSources)
-                    {
-                        if (   line.Contains(v)
-                            && line.Contains(server.Name.TrimPrefDig())
-                            && line.Contains("dsName="))
+                        foreach (var v in server.Endpoints)
                         {
-                            lineAdd = false;
+                            if (line.Contains(v)
+                                && line.Contains(server.Name.TrimPrefDig()))
+                            {
+                                lineAdd = false;
+                                break;
+                            }
+                        }
+
+                        foreach (var v in server.DataSources)
+                        {
+                            if (line.Contains(v)
+                                && line.Contains(server.Name.TrimPrefDig())
+                                && line.Contains("dsName="))
+                            {
+                                lineAdd = false;
+                                break;
+                            }
+                        }
+                        if (lineAdd == false)
+                        {
                             break;
                         }
                     }
-                    if (lineAdd == false)
+                    else
                     {
-                        break;
+                        lineAdd = false;
                     }
                 }
 
@@ -167,27 +174,23 @@ namespace SskAssistWF
             var newConfig = new List<string>();
             var addedList = new List<string>();            
             var currentServer = "";
-            
-            // перебор строк
+
+            // iteration strings config
             foreach (var line in configArr)
             {
                 if (line.Contains("serverName=") || line.Contains("appName=") || line.Contains("dsName=") || line.Contains("queueName=") || line.ToLower().Contains("endpoint"))
                 {
                     currentServer = GetServerName(line);
 
-
-                    // перебор серверов
+                    // iteration servers
                     foreach (var server in serversList)
                     {
-                        // перебор приложений
+                        // iteration applications
                         var appTag = "appName=";
                         foreach (var app in server.Apps)
                         {
                             if (line.Contains(server.Name.TrimPrefDig()) && line.Contains(appTag))
-                            {
-                                var tmp2 = !addedList.Contains(currentServer);
-                                var tmp3 = GetSubstringReplace(line, "appName=");
-
+                            {                                
                                 if (!addedList.Contains($"{currentServer},{app}"))
                                 {
                                     newConfig.Add(line.Replace(GetSubstringReplace(line, appTag), app));
@@ -196,7 +199,7 @@ namespace SskAssistWF
                             }
                         }
 
-                        // перебор datasources
+                        // iteration datasources
                         var dsTag = "dsName=";
                         foreach (var ds in server.DataSources)
                         {
@@ -210,6 +213,38 @@ namespace SskAssistWF
                                 {
                                     newConfig.Add(line.Replace(GetSubstringReplace(line, dsTag), ds));
                                     addedList.Add($"{currentServer},{ds}");
+                                }
+                            }
+                        }
+
+                        // iteration queues
+                        var queueTag = "queueName=";
+                        foreach (var queue in server.Queues)
+                        {
+                            if (line.Contains(server.Name.Replace("Server", "Cluster").TrimPrefDig()) && line.Contains(queueTag))
+                            {
+
+                                var tmp2 = !addedList.Contains(currentServer);
+                                var tmp3 = GetSubstringReplace(line, queueTag);
+
+                                if (!addedList.Contains($"{currentServer},{queue}"))
+                                {
+                                    newConfig.Add(line.Replace(GetSubstringReplace(line, queueTag), queue));
+                                    addedList.Add($"{currentServer},{queue}");
+                                }
+                            }
+                        }
+
+                        // iteration endpoints
+                        var endpointTag = "_endpoint";
+                        foreach (var endpoint in server.Endpoints)
+                        {
+                            if (line.Contains(server.Name.TrimPrefDig()) && line.Contains(endpointTag))
+                            {
+                                if (!addedList.Contains($"{currentServer},{endpoint}"))
+                                {
+                                    newConfig.Add(line.Replace(GetSubstringReplace(line, endpointTag), endpoint));
+                                    addedList.Add($"{currentServer},{endpoint}");
                                 }
                             }
                         }
@@ -229,13 +264,37 @@ namespace SskAssistWF
                 int point1 = line.IndexOf('=', resultFindStart) + 1;
                 int point2 = line.IndexOf(',', point1);
 
-                try
+                if (point1 != -1 && point2 != -1)
                 {
-                    return line.Substring(point1, point2 - point1);
+                    try
+                    {
+                        return line.Substring(point1, point2 - point1);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show(ex.Message);
+                    resultFindStart = line.IndexOf("serverName=");
+                    if (resultFindStart != -1)
+                    {
+                        point1 = line.IndexOf('"', resultFindStart) + 1;
+                        point2 = line.IndexOf('"', point1);
+
+                        if (point1 != -1 && point2 != -1)
+                        {
+                            try
+                            {
+                                return line.Substring(point1, point2 - point1);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                            }
+                        }
+                    }
                 }
             }
             return null;
@@ -263,6 +322,7 @@ namespace SskAssistWF
                 var v = !ServersList2.Contains(server1);
                 if (!ServersList2.Contains(server1))
                 {
+                    server1.Unic = true;
                     serverList1Unic.Add(server1);
                     continue;
                 }
@@ -285,6 +345,7 @@ namespace SskAssistWF
                             server.DataSources.Count != 0
                             )
                         {
+                            server.Unic = false;
                             serverList1Unic.Add(server);
                         }
                     }                    
