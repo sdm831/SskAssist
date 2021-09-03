@@ -168,47 +168,62 @@ namespace SskAssistWF
             }
             return list.ToArray();
         }
-        
+
         public static string[] GetConfigAdd(string[] configArr, SortedSet<Server> serversList)
         {
             var newConfig = new List<string>();
-            var addedList = new List<string>();            
+            var addedList = new List<string>();     // list already added elements       
             var currentServer = "";
+
+            var serverTag = "serverName=";
+            var serverAppTag = "Server=";
+            var appTag = "appName=";
+            var dsTag = "dsName=";
+            var queueTag = "queueName=";
+            var endpointTag = "_endpoint";
+
+
 
             // iteration strings config
             foreach (var line in configArr)
             {
+                
                 if (line.Contains("serverName=") || line.Contains("appName=") || line.Contains("dsName=") || line.Contains("queueName=") || line.ToLower().Contains("endpoint"))
                 {
-                    currentServer = GetServerName(line);
+                    if (!line.Contains("nodeagent"))
+                    {
+                        currentServer = GetServerName(line);        // server from current config's string (old)
+                    }
 
                     // iteration servers
                     foreach (var server in serversList)
-                    {
-                        // iteration applications
-                        var appTag = "appName=";
-                        foreach (var app in server.Apps)
+                    {                        
+                        if (line.Contains("status") && line.Contains(serverTag))
                         {
-                            if (line.Contains(server.Name.TrimPrefDig()) && line.Contains(appTag))
-                            {                                
-                                if (!addedList.Contains($"{currentServer},{app}"))
+                            if (!line.Contains(server.Name))
+                            {
+                                newConfig.Add(line.Replace(currentServer, server.Name));
+                            }
+                        }
+
+                        // iteration applications
+                        if (line.Contains(appTag))
+                        {
+                            foreach (var app in server.Apps)
+                            {
+                                if (!addedList.Contains($"{server.Name},{app}"))
                                 {
-                                    newConfig.Add(line.Replace(GetSubstringReplace(line, appTag), app));
-                                    addedList.Add($"{currentServer},{app}");
+                                    newConfig.Add(line.Replace(GetSubstringReplace(line, appTag), app).Replace(currentServer, server.Name));
+                                    addedList.Add($"{server.Name},{app}");
                                 }
                             }
                         }
 
                         // iteration datasources
-                        var dsTag = "dsName=";
                         foreach (var ds in server.DataSources)
                         {
                             if (line.Contains(server.Name.TrimPrefDig()) && line.Contains(dsTag))
                             {
-
-                                var tmp2 = !addedList.Contains(currentServer);
-                                var tmp3 = GetSubstringReplace(line, dsTag);
-
                                 if (!addedList.Contains($"{currentServer},{ds}"))
                                 {
                                     newConfig.Add(line.Replace(GetSubstringReplace(line, dsTag), ds));
@@ -218,15 +233,10 @@ namespace SskAssistWF
                         }
 
                         // iteration queues
-                        var queueTag = "queueName=";
                         foreach (var queue in server.Queues)
                         {
                             if (line.Contains(server.Name.Replace("Server", "Cluster").TrimPrefDig()) && line.Contains(queueTag))
                             {
-
-                                var tmp2 = !addedList.Contains(currentServer);
-                                var tmp3 = GetSubstringReplace(line, queueTag);
-
                                 if (!addedList.Contains($"{currentServer},{queue}"))
                                 {
                                     newConfig.Add(line.Replace(GetSubstringReplace(line, queueTag), queue));
@@ -236,7 +246,6 @@ namespace SskAssistWF
                         }
 
                         // iteration endpoints
-                        var endpointTag = "_endpoint";
                         foreach (var endpoint in server.Endpoints)
                         {
                             if (line.Contains(server.Name.TrimPrefDig()) && line.Contains(endpointTag))
@@ -251,52 +260,59 @@ namespace SskAssistWF
                     }
                 }
 
-                newConfig.Add(line);                
+                newConfig.Add(line);
             }
             return newConfig.ToArray();
         }
 
         private static string GetServerName(string line)
         {
-            int resultFindStart = line.IndexOf("Server=");
-            if (resultFindStart != -1)
+            int resultFindStart = -1;
+            int point1 = 0;
+            int point2 = 0;
+
+            if (line.Contains("serverName=") /*&& !line.Contains("nodeagent")*/)
             {
-                int point1 = line.IndexOf('=', resultFindStart) + 1;
-                int point2 = line.IndexOf(',', point1);
-
-                if (point1 != -1 && point2 != -1)
+                resultFindStart = line.IndexOf("serverName=");
+                if (resultFindStart != -1)
                 {
-                    try
-                    {
-                        return line.Substring(point1, point2 - point1);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                }
-                else
-                {
-                    resultFindStart = line.IndexOf("serverName=");
-                    if (resultFindStart != -1)
-                    {
-                        point1 = line.IndexOf('"', resultFindStart) + 1;
-                        point2 = line.IndexOf('"', point1);
+                    point1 = line.IndexOf('"', resultFindStart) + 1;
+                    point2 = line.IndexOf('"', point1);
 
-                        if (point1 != -1 && point2 != -1)
+                    if (point1 != -1 && point2 != -1)
+                    {
+                        try
                         {
-                            try
-                            {
-                                return line.Substring(point1, point2 - point1);
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show(ex.Message);
-                            }
+                            return line.Substring(point1, point2 - point1);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
                         }
                     }
                 }
             }
+            else
+            {
+                resultFindStart = line.IndexOf("Server=");
+                if (resultFindStart != -1)
+                {
+                    point1 = line.IndexOf('=', resultFindStart) + 1;
+                    point2 = line.IndexOf(',', point1);
+
+                    if (point1 != -1 && point2 != -1)
+                    {
+                        try
+                        {
+                            return line.Substring(point1, point2 - point1);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                    }                    
+                }
+            }            
             return null;
         }
 
