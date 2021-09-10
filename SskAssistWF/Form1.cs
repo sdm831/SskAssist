@@ -27,8 +27,9 @@ namespace SskAssistWF
             
         }
                 
-        private void btnChoosePro_Click(object sender, EventArgs e)
+        private void btnChooseOld_Click(object sender, EventArgs e)
         {
+            // choose OLD file for compare
             OpenFileDialog ofdOld = new OpenFileDialog();
             ofdOld.ShowDialog();
                         
@@ -40,6 +41,7 @@ namespace SskAssistWF
 
         private void BtnChooseNew_Click(object sender, EventArgs e)
         {
+            // choose NEW file for compare
             OpenFileDialog ofdNew = new OpenFileDialog();
             ofdNew.ShowDialog();
 
@@ -51,6 +53,7 @@ namespace SskAssistWF
 
         private void btnChooseDest_Click(object sender, EventArgs e)
         {
+            // choose destination directory
             var fbdDest = new FolderBrowserDialog();
             if (fbdDest.ShowDialog() == DialogResult.OK)
             {
@@ -66,9 +69,7 @@ namespace SskAssistWF
 
             textBoxPathDiff.Text = ofdDiff.FileName;      // полный путь до файла
             textBoxPathDiff.Tag = ofdDiff.SafeFileName;   // имя файла
-            Data.PathToExpDiffObjsJson = ofdDiff.FileName;
-            //Data.PathToConfigFileStend[0] = ofdDiff.FileName;
-            //Data.PathToConfigFileStend[1] = ofdDiff.SafeFileName;
+            Data.PathToExpDiffObjsJson = ofdDiff.FileName;            
         }
                 
         private void btnCompare_Click(object sender, EventArgs e)

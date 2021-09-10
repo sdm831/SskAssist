@@ -53,9 +53,8 @@ namespace SskAssistWF
 
                         objName = line.Substring(indexOfSubstringStart, indexOfSubstringEnd - indexOfSubstringStart);
 
-
-                                // исключение дублированных систем (12,21,22) и ODR серверов
-                        if (!listObjects.Any(s => s.Contains(objName)) && !objName.TrimPrefDig().ToLower().Contains("odr"))
+                        // исключение дублированных систем (12,21,22) и ODR серверов
+                        if (/*!listObjects.Any(s => s.Contains(objName)) &&*/ !objName.TrimPrefDig().ToLower().Contains("odr"))
                         {
                             listObjects.Add(objName);
                         }
@@ -173,10 +172,11 @@ namespace SskAssistWF
         {
             var newConfig = new List<string>();
             var addedList = new List<string>();     // list already added elements       
-            var currentServer = "";
+            var lineServer = "";
+            var lineCluster = "";
+            var ListCluster = "";
 
-            var serverTag = "serverName=";
-            var serverAppTag = "Server=";
+            var serverTag = "serverName=";            
             var appTag = "appName=";
             var dsTag = "dsName=";
             var queueTag = "queueName=";
@@ -190,70 +190,81 @@ namespace SskAssistWF
                 
                 if (line.Contains("serverName=") || line.Contains("appName=") || line.Contains("dsName=") || line.Contains("queueName=") || line.ToLower().Contains("endpoint"))
                 {
-                    if (!line.Contains("nodeagent"))
-                    {
-                        currentServer = GetServerName(line);        // server from current config's string (old)
-                    }
+                    //if (!line.Contains("nodeagent"))
+                    //{
+                    //    currentServer = GetServerName(line);        // server from current config's string (old)
+                    //}
 
-                    // iteration servers
+                    // iteration servers                    
                     foreach (var server in serversList)
                     {                        
                         if (line.Contains("status") && line.Contains(serverTag))
                         {
+                            lineServer = GetSubstringValue(line, serverTag, '"', '"');
+                            
                             if (!line.Contains(server.Name))
                             {
-                                newConfig.Add(line.Replace(currentServer, server.Name));
+                                newConfig.Add(line.Replace(lineServer, server.Name));
                             }
                         }
 
                         // iteration applications
                         if (line.Contains(appTag))
                         {
+                            lineServer = GetSubstringValue(line, "Server=", '=', ',');
+
                             foreach (var app in server.Apps)
                             {
                                 if (!addedList.Contains($"{server.Name},{app}"))
                                 {
-                                    newConfig.Add(line.Replace(GetSubstringReplace(line, appTag), app).Replace(currentServer, server.Name));
+                                    newConfig.Add(line.Replace(GetSubstringValue(line, appTag, '"', '"'), app).Replace(lineServer, server.Name));
                                     addedList.Add($"{server.Name},{app}");
                                 }
                             }
                         }
 
                         // iteration datasources
-                        foreach (var ds in server.DataSources)
+                        if (line.Contains(dsTag))
                         {
-                            if (line.Contains(server.Name.TrimPrefDig()) && line.Contains(dsTag))
+                            lineServer = GetSubstringValue(line, "Server=", '=', ',');
+
+                            foreach (var ds in server.DataSources)
                             {
-                                if (!addedList.Contains($"{currentServer},{ds}"))
+                                if (!addedList.Contains($"{server.Name},{ds}"))
                                 {
-                                    newConfig.Add(line.Replace(GetSubstringReplace(line, dsTag), ds));
-                                    addedList.Add($"{currentServer},{ds}");
+                                    newConfig.Add(line.Replace(GetSubstringValue(line, dsTag, '"', '"'), ds).Replace(lineServer, server.Name));
+                                    addedList.Add($"{server.Name},{ds}");
                                 }
                             }
                         }
 
                         // iteration queues
-                        foreach (var queue in server.Queues)
+                        if (line.Contains(queueTag))
                         {
-                            if (line.Contains(server.Name.Replace("Server", "Cluster").TrimPrefDig()) && line.Contains(queueTag))
+                            lineCluster = GetSubstringValue(line, "Engine=", '=', '.').TrimPrefDig();
+                            ListCluster = server.Name.Replace("Server", "Cluster").TrimPrefDig();
+
+                            foreach (var queue in server.Queues)
                             {
-                                if (!addedList.Contains($"{currentServer},{queue}"))
+                                if (!addedList.Contains($"{ListCluster},{queue}"))
                                 {
-                                    newConfig.Add(line.Replace(GetSubstringReplace(line, queueTag), queue));
-                                    addedList.Add($"{currentServer},{queue}");
+                                    newConfig.Add(line.Replace(GetSubstringValue(line, queueTag, '"', '"'), queue).Replace(lineCluster, ListCluster));
+                                    addedList.Add($"{ListCluster},{queue}");
                                 }
                             }
                         }
 
                         // iteration endpoints
-                        foreach (var endpoint in server.Endpoints)
+                        if (line.Contains(endpointTag))
                         {
-                            if (line.Contains(server.Name.TrimPrefDig()) && line.Contains(endpointTag))
+                            lineServer = GetSubstringValue(line, serverTag, '"', '"');
+
+                            foreach (var endpoint in server.Endpoints)
                             {
-                                if (!addedList.Contains($"{currentServer},{endpoint}"))
+                                if (!addedList.Contains($"{lineServer},{endpoint}"))
                                 {
-                                    newConfig.Add(line.Replace(GetSubstringReplace(line, endpointTag), endpoint));
-                                    addedList.Add($"{currentServer},{endpoint}");
+                                    newConfig.Add(line.Replace(lineServer, server.Name));
+                                    addedList.Add($"{server.Name},{endpoint}");
                                 }
                             }
                         }
@@ -265,19 +276,19 @@ namespace SskAssistWF
             return newConfig.ToArray();
         }
 
-        private static string GetServerName(string line)
+        public static string GetSubstringValue(string line, string keyWord, char start, char end)
         {
             int resultFindStart = -1;
             int point1 = 0;
             int point2 = 0;
 
-            if (line.Contains("serverName=") /*&& !line.Contains("nodeagent")*/)
+            if (line.Contains(keyWord))
             {
-                resultFindStart = line.IndexOf("serverName=");
+                resultFindStart = line.IndexOf(keyWord);
                 if (resultFindStart != -1)
                 {
-                    point1 = line.IndexOf('"', resultFindStart) + 1;
-                    point2 = line.IndexOf('"', point1);
+                    point1 = line.IndexOf(start, resultFindStart) + 1;
+                    point2 = line.IndexOf(end, point1);
 
                     if (point1 != -1 && point2 != -1)
                     {
@@ -292,42 +303,72 @@ namespace SskAssistWF
                     }
                 }
             }
-            else
-            {
-                resultFindStart = line.IndexOf("Server=");
-                if (resultFindStart != -1)
-                {
-                    point1 = line.IndexOf('=', resultFindStart) + 1;
-                    point2 = line.IndexOf(',', point1);
-
-                    if (point1 != -1 && point2 != -1)
-                    {
-                        try
-                        {
-                            return line.Substring(point1, point2 - point1);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message);
-                        }
-                    }                    
-                }
-            }            
             return null;
         }
 
-        public static string GetSubstringReplace(this string line, string keyWord)
-        {
-            int resultFindStart = line.IndexOf(keyWord);
-            if (resultFindStart != -1)
-            {
-                int point1 = line.IndexOf('"', resultFindStart) + 1;
-                int point2 = line.IndexOf('"', point1);
+        //private static string GetServerName(string line)
+        //{
+        //    int resultFindStart = -1;
+        //    int point1 = 0;
+        //    int point2 = 0;
 
-                return line.Substring(point1, point2 - point1);
-            }
-            return null;
-        }
+        //    if (line.Contains("serverName=") /*&& !line.Contains("nodeagent")*/)
+        //    {
+        //        resultFindStart = line.IndexOf("serverName=");
+        //        if (resultFindStart != -1)
+        //        {
+        //            point1 = line.IndexOf('"', resultFindStart) + 1;
+        //            point2 = line.IndexOf('"', point1);
+
+        //            if (point1 != -1 && point2 != -1)
+        //            {
+        //                try
+        //                {
+        //                    return line.Substring(point1, point2 - point1);
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    MessageBox.Show(ex.Message);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        resultFindStart = line.IndexOf("Server=");
+        //        if (resultFindStart != -1)
+        //        {
+        //            point1 = line.IndexOf('=', resultFindStart) + 1;
+        //            point2 = line.IndexOf(',', point1);
+
+        //            if (point1 != -1 && point2 != -1)
+        //            {
+        //                try
+        //                {
+        //                    return line.Substring(point1, point2 - point1);
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    MessageBox.Show(ex.Message);
+        //                }
+        //            }                    
+        //        }
+        //    }            
+        //    return null;
+        //}
+
+        //public static string GetSubstringReplace(this string line, string keyWord)
+        //{
+        //    int resultFindStart = line.IndexOf(keyWord);
+        //    if (resultFindStart != -1)
+        //    {
+        //        int point1 = line.IndexOf('"', resultFindStart) + 1;
+        //        int point2 = line.IndexOf('"', point1);
+        //
+        //        return line.Substring(point1, point2 - point1);
+        //    }
+        //    return null;
+        //}
 
         public static SortedSet<Server> GetServersUnicObjs(SortedSet<Server> serversList1, SortedSet<Server> ServersList2)
         {
@@ -407,8 +448,6 @@ namespace SskAssistWF
         //        }
         //    }
         //}
-
-
 
 
     }

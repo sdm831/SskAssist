@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SskAssistWF", "SskAssistWF\SskAssistWF.csproj", "{6E9D66E2-AE15-49D0-A484-06ECC7A2515B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SskAssistTest", "SskAssistTest\SskAssistTest.csproj", "{19E9C150-FDC9-4691-B729-1798DDEDF2C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SskAssistTest", "SskAssistTest\SskAssistTest.csproj", "{19E9C150-FDC9-4691-B729-1798DDEDF2C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "img", "img", "{2A074450-D0BD-40C7-8C5A-B288145B4BB6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

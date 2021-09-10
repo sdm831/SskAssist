@@ -29,6 +29,7 @@ namespace SskAssistWF
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.textBoxPathNew = new System.Windows.Forms.TextBox();
             this.textBoxPathOld = new System.Windows.Forms.TextBox();
             this.textBoxPathDest = new System.Windows.Forms.TextBox();
@@ -97,7 +98,7 @@ namespace SskAssistWF
             this.btnChoosePro.TabIndex = 5;
             this.btnChoosePro.Text = "...";
             this.btnChoosePro.UseVisualStyleBackColor = true;
-            this.btnChoosePro.Click += new System.EventHandler(this.btnChoosePro_Click);
+            this.btnChoosePro.Click += new System.EventHandler(this.btnChooseOld_Click);
             // 
             // label1
             // 
@@ -322,8 +323,9 @@ namespace SskAssistWF
             this.Controls.Add(this.textBoxPathDest);
             this.Controls.Add(this.textBoxPathOld);
             this.Controls.Add(this.textBoxPathNew);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "SskAssist";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
